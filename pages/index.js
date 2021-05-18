@@ -1,26 +1,44 @@
-import Header from "@/Header";
 import tw from "twin.macro";
-import Button from "@/Button";
-import Footer from "@/Footer";
 
 const HomePage = () => {
   return (
-    <div tw="flex flex-col">
-      <Header />
-      <div tw="w-full relative">
-        <img src="/images/png/banner.png" tw="sm:h-full" />
-        <div tw="flex flex-col justify-center items-center sm:pb-20 absolute top-1/2 left-1/2 text-white transform -translate-y-1/2 -translate-x-1/2">
-          <h1 tw="text-5xl font-bold mb-4">mintHNT</h1>
-          <h2 tw="text-lg mb-4 text-center">
-            Get Your Free Helium Hotspot Today And Start Earning{" "}
-            <strong>$$$</strong>
-          </h2>
-          <Button tw="px-5 py-2 mb-4 font-semibold outline-none rounded shadow bg-white text-purple-500">
-            Apply now
-          </Button>
+    <div className="MainBackground">
+      <div tw="w-full h-full bg-purple-500 bg-opacity-75 py-20 px-12 flex justify-between">
+        <div tw="flex flex-col justify-start items-start">
+          <div tw="bg-white text-purple-500 px-4 py-1 rounded-lg font-semibold">
+            Coming June 2021
+          </div>
+          <div tw="flex flex-col text-white text-5xl pt-10">
+            <span>Connect The World.</span>
+            <span>Get Paid.</span>
+          </div>
+          <div tw="text-white pt-8 font-semibold">
+            MintHNT is a new model for delivering wireless networks that
+            <br /> rewards individuals and business in exchange for providing
+            <br />
+            wireless coverage. Based on the Helium Networks blockchain,
+            <br /> MintHNT represents a transformational shift towards a<br />
+            decentralized, people-powered wireless economy.
+          </div>
+          <div tw="pt-6">
+            <button tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none">
+              Apply Now
+            </button>
+          </div>
+        </div>
+        <div tw="w-96">
+          <img tw="w-full" src="/images/svg/launch.svg" />
         </div>
       </div>
-      <Footer />
+      <style jsx>{`
+        .MainBackground {
+          background-image: url(/images/jpg/main-background.jpg);
+          background-repeat: no-repeat;
+          background-size: cover;
+          width: 100%;
+          height: 100vh;
+        }
+      `}</style>
     </div>
   );
 };
