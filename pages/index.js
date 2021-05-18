@@ -3,16 +3,25 @@ import tw from "twin.macro";
 const HomePage = () => {
   return (
     <div className="MainBackground">
-      <div tw="w-full h-full bg-purple-500 bg-opacity-75 py-20 px-12 flex justify-between">
-        <div tw="flex flex-col justify-start items-start">
-          <div tw="bg-white text-purple-500 px-4 py-1 rounded-lg font-semibold">
+      <div tw="w-full h-full bg-purple-500 bg-opacity-75 py-20 px-12 flex justify-between sm:py-8">
+        <div tw="flex flex-col justify-start items-start sm:items-center sm:justify-between">
+          <div tw="text-white px-4 py-1 rounded-lg font-semibold text-3xl lg:hidden">
+            MintHNT
+          </div>
+          <div tw="bg-white text-purple-500 px-4 py-1 rounded-lg font-semibold sm:hidden">
             Coming June 2021
           </div>
-          <div tw="flex flex-col text-white text-5xl pt-10">
+          <div tw="flex flex-col text-white text-5xl pt-10 sm:text-2xl sm:py-4 sm:font-semibold">
             <span>Connect The World.</span>
             <span>Get Paid.</span>
           </div>
-          <div tw="text-white pt-8 font-semibold">
+          <div tw="w-64 lg:hidden">
+            <img tw="w-full" src="/images/svg/launch.svg" />
+          </div>
+          <div tw="bg-white text-purple-500 px-4 py-1 mt-5 rounded-lg font-semibold lg:hidden">
+            Coming June 2021
+          </div>
+          <div tw="text-white pt-8 font-semibold sm:text-center sm:hidden">
             MintHNT is a new model for delivering wireless networks that
             <br /> rewards individuals and business in exchange for providing
             <br />
@@ -20,13 +29,13 @@ const HomePage = () => {
             <br /> MintHNT represents a transformational shift towards a<br />
             decentralized, people-powered wireless economy.
           </div>
-          <div tw="pt-6">
+          <div tw="pt-6 sm:hidden">
             <button tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none">
               Apply Now
             </button>
           </div>
         </div>
-        <div tw="w-96">
+        <div tw="w-96 sm:hidden">
           <img tw="w-full" src="/images/svg/launch.svg" />
         </div>
       </div>
