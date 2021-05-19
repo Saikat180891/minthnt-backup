@@ -1,6 +1,10 @@
 import tw from "twin.macro";
+import Modal from "@/Modal";
+import LeadForm from "@/LeadForm";
+import React from "react";
 
 const HomePage = () => {
+  const [showModal, setShowModal] = React.useState(false);
   return (
     <div className="MainBackground">
       <div tw="w-full h-full bg-purple-500 bg-opacity-75 py-20 px-12 flex justify-between sm:py-8">
@@ -29,8 +33,11 @@ const HomePage = () => {
             <br /> MintHNT represents a transformational shift towards a<br />
             decentralized, people-powered wireless economy.
           </div>
-          <div tw="pt-6 sm:hidden">
-            <button tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none">
+          <div tw="pt-6 sm:pt-4">
+            <button
+              onClick={() => setShowModal(true)}
+              tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none focus:outline-none"
+            >
               Apply Now
             </button>
           </div>
@@ -39,6 +46,9 @@ const HomePage = () => {
           <img tw="w-full" src="/images/svg/launch.svg" />
         </div>
       </div>
+      <Modal show={showModal} blurBackground>
+        <LeadForm onClose={() => setShowModal(false)} />
+      </Modal>
       <style jsx>{`
         .MainBackground {
           background-image: url(/images/jpg/main-background.jpg);
