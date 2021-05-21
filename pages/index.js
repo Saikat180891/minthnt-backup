@@ -1,7 +1,6 @@
 import tw from "twin.macro";
-import Modal from "@/Modal";
-import LeadForm from "@/LeadForm";
 import React from "react";
+import Link from "next/link";
 
 const HomePage = () => {
   const [showModal, setShowModal] = React.useState(false);
@@ -34,21 +33,17 @@ const HomePage = () => {
             decentralized, people-powered wireless economy.
           </div>
           <div tw="pt-6 sm:pt-4">
-            <button
-              onClick={() => setShowModal(true)}
-              tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none focus:outline-none"
-            >
-              Apply Now
-            </button>
+            <Link href="/register">
+              <button tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none focus:outline-none">
+                Apply Now
+              </button>
+            </Link>
           </div>
         </div>
         <div tw="w-96 sm:hidden">
           <img tw="w-full" src="/images/svg/launch.svg" />
         </div>
       </div>
-      <Modal show={showModal} blurBackground>
-        <LeadForm onClose={() => setShowModal(false)} />
-      </Modal>
       <style jsx>{`
         .MainBackground {
           background-image: url(/images/jpg/main-background.jpg);
