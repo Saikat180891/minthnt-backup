@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import { AtSignIcon, AddIcon, CalendarIcon } from "@chakra-ui/icons";
 
 const routes = [
-  {
-    path: "/",
-    label: "Dashboard",
-    icon: CalendarIcon,
-  },
+  // {
+  //   path: "/",
+  //   label: "Dashboard",
+  //   icon: CalendarIcon,
+  // },
   {
     path: "/leads",
     label: "Leads",

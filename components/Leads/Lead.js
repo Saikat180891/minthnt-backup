@@ -106,7 +106,7 @@ const Lead = ({
             justifyContent="flex-end"
             direction="column"
           >
-            <Text marginBottom="1rem">Accept Request?</Text>
+            {/* <Text marginBottom="1rem">Accept Request?</Text>
             <Flex justifyContent="center">
               <Button
                 backgroundColor="green.300"
@@ -118,7 +118,7 @@ const Lead = ({
               <Button backgroundColor="red.300" color="red.900">
                 Reject
               </Button>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Grid>
       </AccordionPanel>
