@@ -16,6 +16,7 @@ const Register = () => {
     } catch (err) {}
     setShowModal(false);
   };
+
   return (
     <Flex justifyContent="center" alignItems="center" tw="bg-purple-100">
       <Box width="40rem" paddingY="2rem">

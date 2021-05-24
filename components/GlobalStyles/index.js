@@ -20,6 +20,17 @@ a {
   box-sizing: border-box;
 }
 
+button{
+  outline: none;
+}
+button:active{
+  outline: none;
+}
+button:focus{
+  outline: none;
+}
+
+
 `;
 
 const GlobalStyles = () => (

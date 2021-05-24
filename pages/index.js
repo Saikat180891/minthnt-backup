@@ -1,60 +1,187 @@
-import tw from "twin.macro";
+import {
+  Flex,
+  Box,
+  Grid,
+  GridItem,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  StatArrow,
+  StatGroup,
+} from "@chakra-ui/react";
+import Dashboard from "@/Dashboard";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 import React from "react";
-import Link from "next/link";
+import tw from "twin.macro";
+const Index = () => {
+  React.useEffect(() => {
+    mapboxgl.accessToken =
+      "pk.eyJ1Ijoic2Fpa2F0cGF1bCIsImEiOiJja3AwNjJ4eGgwbWZvMnZtcndmZGk1cDFtIn0.BgQq-HOiLgT7HCaFNc66UA";
 
-const HomePage = () => {
-  const [showModal, setShowModal] = React.useState(false);
+    var map = new mapboxgl.Map({
+      container: "mapbox",
+      style: "mapbox://styles/mapbox/streets-v11",
+      zoom: 12,
+      center: [-122.447303, 37.753574],
+    });
+    map.on("load", function () {
+      /* Sample feature from the `examples.8fgz4egr` tileset:
+      {
+      "type": "Feature",
+      "properties": {
+      "ethnicity": "White"
+      },
+      "geometry": {
+      "type": "Point",
+      "coordinates": [ -122.447303, 37.753574 ]
+      }
+      }
+      */
+      map.addSource("ethnicity", {
+        type: "vector",
+        url: "mapbox://examples.8fgz4egr",
+      });
+      map.addLayer({
+        id: "population",
+        type: "circle",
+        source: "ethnicity",
+        "source-layer": "sf2010",
+        paint: {
+          // make circles larger as the user zooms from z12 to z22
+          "circle-radius": {
+            base: 1.75,
+            stops: [
+              [12, 2],
+              [22, 180],
+            ],
+          },
+          // color circles by ethnicity, using a match expression
+          // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
+          "circle-color": [
+            "match",
+            ["get", "ethnicity"],
+            "White",
+            "#fbb03b",
+            "Black",
+            "#223b53",
+            "Hispanic",
+            "#e55e5e",
+            "Asian",
+            "#3bb2d0",
+            /* other */ "#ccc",
+          ],
+        },
+      });
+    });
+  }, []);
+
   return (
-    <div className="MainBackground">
-      <div tw="w-full h-full bg-purple-500 bg-opacity-75 py-20 px-12 flex justify-between sm:py-8">
-        <div tw="flex flex-col justify-start items-start sm:items-center sm:justify-between">
-          <div tw="text-white px-4 py-1 rounded-lg font-semibold text-3xl lg:hidden">
-            MintHNT
-          </div>
-          <div tw="bg-white text-purple-500 px-4 py-1 rounded-lg font-semibold sm:hidden">
-            Coming June 2021
-          </div>
-          <div tw="flex flex-col text-white text-5xl pt-10 sm:text-2xl sm:py-4 sm:font-semibold">
-            <span>Connect The World.</span>
-            <span>Get Paid.</span>
-          </div>
-          <div tw="w-64 lg:hidden">
-            <img tw="w-full" src="/images/svg/launch.svg" />
-          </div>
-          <div tw="bg-white text-purple-500 px-4 py-1 mt-5 rounded-lg font-semibold lg:hidden">
-            Coming June 2021
-          </div>
-          <div tw="text-white pt-8 font-semibold sm:text-center sm:hidden">
-            MintHNT is a new model for delivering wireless networks that
-            <br /> rewards individuals and business in exchange for providing
-            <br />
-            wireless coverage. Based on the Helium Networks blockchain,
-            <br /> MintHNT represents a transformational shift towards a<br />
-            decentralized, people-powered wireless economy.
-          </div>
-          <div tw="pt-6 sm:pt-4">
-            <Link href="/register">
-              <button tw="px-4 py-1 rounded-lg text-purple-500 bg-white outline-none focus:outline-none">
-                Apply Now
-              </button>
-            </Link>
-          </div>
-        </div>
-        <div tw="w-96 sm:hidden">
-          <img tw="w-full" src="/images/svg/launch.svg" />
-        </div>
-      </div>
-      <style jsx>{`
-        .MainBackground {
-          background-image: url(/images/jpg/main-background.jpg);
-          background-repeat: no-repeat;
-          background-size: cover;
-          width: 100%;
-          height: 100vh;
-        }
-      `}</style>
-    </div>
+    <Dashboard>
+      <Box padding="2rem">
+        <Grid
+          h="80vh"
+          templateRows="repeat(3, 1fr)"
+          templateColumns="repeat(6, 1fr)"
+          gap={4}
+        >
+          <GridItem
+            id="mapbox"
+            rowSpan={2}
+            colSpan={2}
+            bg="white"
+            shadow="sm"
+            rounded="md"
+          ></GridItem>
+          <GridItem
+            rowSpan={1}
+            bg="white"
+            shadow="sm"
+            padding="1rem"
+            rounded="md"
+          >
+            <Stat>
+              <StatLabel>Sent</StatLabel>
+              <StatNumber>345,670</StatNumber>
+              <StatHelpText>
+                <StatArrow type="increase" />
+                23.36%
+              </StatHelpText>
+            </Stat>
+          </GridItem>
+          <GridItem
+            rowSpan={1}
+            bg="white"
+            shadow="sm"
+            padding="1rem"
+            rounded="md"
+          >
+            <Stat>
+              <StatLabel>Sent</StatLabel>
+              <StatNumber>345,670</StatNumber>
+              <StatHelpText>
+                <StatArrow type="increase" />
+                23.36%
+              </StatHelpText>
+            </Stat>
+          </GridItem>
+          <GridItem
+            rowSpan={1}
+            bg="white"
+            shadow="sm"
+            padding="1rem"
+            rounded="md"
+          >
+            <Stat>
+              <StatLabel>Sent</StatLabel>
+              <StatNumber>345,670</StatNumber>
+              <StatHelpText>
+                <StatArrow type="increase" />
+                23.36%
+              </StatHelpText>
+            </Stat>
+          </GridItem>
+          <GridItem
+            rowSpan={1}
+            bg="white"
+            shadow="sm"
+            padding="1rem"
+            rounded="md"
+          >
+            <Stat>
+              <StatLabel>Sent</StatLabel>
+              <StatNumber>345,670</StatNumber>
+              <StatHelpText>
+                <StatArrow type="increase" />
+                23.36%
+              </StatHelpText>
+            </Stat>
+          </GridItem>
+          <GridItem colSpan={2} bg="white" shadow="sm" />
+          <GridItem colSpan={2} bg="white" shadow="sm"></GridItem>
+          <GridItem colSpan={4} bg="white" shadow="sm" />
+        </Grid>
+      </Box>
+    </Dashboard>
   );
 };
 
-export default HomePage;
+export default Index;
+
+export async function getServerSideProps({ req, res }) {
+  let isLoggedIn = false;
+  const isCookieAvailable = req.cookies.token;
+  if (isCookieAvailable) {
+    isLoggedIn = true;
+    return {
+      props: { isLoggedIn },
+    };
+  }
+
+  res.statusCode = 302;
+  res.setHeader("Location", `/login`);
+
+  return {
+    props: {},
+  };
+}
