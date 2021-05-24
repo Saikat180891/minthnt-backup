@@ -13,11 +13,13 @@ import {
 } from "@chakra-ui/react";
 import Apis from "../../context/apis";
 import { useRouter } from "next/router";
+import Cookie from "js-cookie";
 
 const Topnav = () => {
   const router = useRouter();
   const handleLogout = async () => {
     await Apis.logout();
+    Cookie.remove("token");
     router.push("/login");
   };
   return (

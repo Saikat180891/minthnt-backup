@@ -41,12 +41,13 @@ const Apis = (() => {
     const url = `${baseUrl}/api/v1/auth/logout`;
     const res = await fetch(url, {
       method: "POST",
+      body: JSON.stringify({}),
       headers: {
         Authorization: `Token ${Cookie.get("token")}`,
+        "Content-Type": "application/json",
       },
     });
-    const data = await res.json();
-    Cookie.remove("token");
+    if (res.status === 204) Cookie.remove("token");
   };
 
   const registerAdmin = async (payload) => {

@@ -151,7 +151,7 @@ const RegisterAdmin = () => {
                   </Flex>
                 </Box>
                 <Flex justifyContent="flex-end">
-                  <Button type="submit">Apply</Button>
+                  <Button type="submit">Register</Button>
                 </Flex>
               </Flex>
             </Form>

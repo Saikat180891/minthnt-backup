@@ -21,7 +21,9 @@ const Lead = ({
   phone_no = "",
   email = "",
   address = {},
+  miscellaneous_questions = "",
 }) => {
+  const [misc, setMisc] = React.useState(JSON.parse(miscellaneous_questions));
   return (
     <AccordionItem
       marginBottom="1rem"
@@ -121,6 +123,33 @@ const Lead = ({
             </Flex> */}
           </Flex>
         </Grid>
+        <Flex direction="column" mt="4">
+          {misc.map((q, i) => (
+            <Flex
+              bg="white"
+              p="4"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              direction="column"
+              key={i}
+              fontSize="sm"
+              rounded="lg"
+            >
+              <Box>{q.ques}</Box>
+              <Box
+                rounded="md"
+                px="3"
+                py="1"
+                mt="1"
+                fontWeight="600"
+                bg={q.ans === true ? "green.300" : "red.300"}
+                color="white"
+              >
+                {q.ans === true ? "Yes" : "No"}
+              </Box>
+            </Flex>
+          ))}
+        </Flex>
       </AccordionPanel>
     </AccordionItem>
   );
