@@ -10,7 +10,7 @@ const routes = [
   //   icon: CalendarIcon,
   // },
   {
-    path: "/leads",
+    path: "/",
     label: "Leads",
     icon: AtSignIcon,
   },

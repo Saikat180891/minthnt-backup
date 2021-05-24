@@ -40,6 +40,7 @@ const Apis = (() => {
   const logout = async () => {
     const url = `${baseUrl}/api/v1/auth/logout`;
     const res = await fetch(url, {
+      method: "POST",
       headers: {
         Authorization: `Token ${Cookie.get("token")}`,
       },
