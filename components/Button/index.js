@@ -1,10 +1,21 @@
-import tw from "twin.macro";
+import { Button as ChakraButton } from "@chakra-ui/icons";
 
 const Button = ({ children, ...rest }) => {
   return (
-    <button tw="outline-none focus:outline-none active:outline-none" {...rest}>
+    <ChakraButton
+      borderColor={"gray.300"}
+      _hover={{
+        borderColor: "gray.300",
+      }}
+      _active={{ borderColor: "gray.300", outline: "none" }}
+      _focus={{
+        borderColor: "gray.300",
+        outline: "none",
+      }}
+      {...rest}
+    >
       {children}
-    </button>
+    </ChakraButton>
   );
 };
 

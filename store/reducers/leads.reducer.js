@@ -16,6 +16,9 @@ const initialLeadState = {
     isLastPage: false,
     leads: [],
   },
+  others: {
+    filters: {},
+  },
 };
 
 export const leadReducer = (state = initialLeadState, { type, payload }) => {
@@ -25,6 +28,29 @@ export const leadReducer = (state = initialLeadState, { type, payload }) => {
         ...state,
         requestedLeads: {
           ...payload,
+        },
+      };
+    case types.ADD_FILTER:
+      return {
+        ...state,
+        others: {
+          ...state.others,
+          filters: {
+            ...state?.others?.filters,
+            ...payload,
+          },
+        },
+      };
+    case types.REMOVE_FILTER:
+      const appliedFilters = state?.others?.filters;
+      delete appliedFilters[payload];
+      return {
+        ...state,
+        others: {
+          ...state.others,
+          filters: {
+            ...appliedFilters,
+          },
         },
       };
     default:

@@ -1,24 +1,24 @@
 import React from "react";
-import { IconButton, Box } from "@chakra-ui/react";
+import { IconButton, Box, Text, HStack, VStack, Flex } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import DropdownMenu from "../DropdownMenu";
 
 const PaginationNavigator = ({ onPrevious = () => {}, onNext = () => {} }) => {
   return (
-    <Box>
+    <HStack spacing={3}>
       <IconButton
+        rounded="full"
         onClick={onPrevious}
-        colorScheme="blue"
-        aria-label="Search database"
+        aria-label="Previous"
         icon={<ChevronLeftIcon />}
-        mr="3"
       />
       <IconButton
+        rounded="full"
         onClick={onNext}
-        colorScheme="blue"
-        aria-label="Search database"
+        aria-label="Next"
         icon={<ChevronRightIcon />}
       />
-    </Box>
+    </HStack>
   );
 };
 

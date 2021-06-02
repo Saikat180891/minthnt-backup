@@ -20,6 +20,8 @@ a {
   box-sizing: border-box;
 }
 
+:focus {outline:0 !important;}
+
 button{
   outline: none;
 }

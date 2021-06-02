@@ -8,7 +8,7 @@ import {
   Tag,
   Flex,
 } from "@chakra-ui/react";
-import RequestedLeads from "./RequestedLeads";
+import LeadsTab from "./RequestedLeads";
 import Apis from "../../context/apis";
 import React from "react";
 import {
@@ -24,7 +24,7 @@ const LeadsView = () => {
         <TabList>
           <Tab>
             <Tag backgroundColor="gray.300" color="gray.900">
-              Requests
+              On Hold
             </Tag>
           </Tab>
           <Tab>
@@ -38,10 +38,15 @@ const LeadsView = () => {
             </Tag>
           </Tab>
         </TabList>
-
         <TabPanels>
           <TabPanel>
-            <RequestedLeads tabType={GET_REQUESTED_LEADS} />
+            <LeadsTab tabType={GET_REQUESTED_LEADS} />
+          </TabPanel>
+          <TabPanel>
+            <LeadsTab tabType={GET_ACCEPTED_LEADS} />
+          </TabPanel>
+          <TabPanel>
+            <LeadsTab tabType={GET_REJECTED_LEADS} />
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -11,9 +11,17 @@ import {
   Image,
   Button,
   Text,
+  HStack,
+  Stack,
+  IconButton,
+  ButtonGroup,
 } from "@chakra-ui/react";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import React from "react";
 import tw from "twin.macro";
+import DisplayText from "../DisplayText";
+import * as types from "../../store/types/types";
+import ImagePreview from "../ImagePreview";
 
 const Lead = ({
   first_name = "",
@@ -22,53 +30,97 @@ const Lead = ({
   email = "",
   address = {},
   miscellaneous_questions = "",
+  index = 0,
+  referred_by = "",
+  lead = {},
+  tabType = "",
+  onReject = () => {},
+  onAccept = () => {},
+  onImageUpload = () => {},
 }) => {
   const [misc, setMisc] = React.useState(JSON.parse(miscellaneous_questions));
+  const [bg, setBg] = React.useState(
+    index % 2 === 0 ? "white" : "blackAlpha.100"
+  );
+  const [radioimage, setRadioImage] = React.useState();
+
+  const handleImageUpload = () => {
+    onImageUpload(radioimage, lead);
+  };
+
   return (
-    <AccordionItem
-      marginBottom="1rem"
-      backgroundColor="#f5f6f8"
-      rounded="0.5rem"
-      shadow="sm"
-    >
-      <Box>
-        <AccordionButton
-          padding="1rem"
-          rounded="0.5rem"
-          shadow="sm"
-          outline="none"
-          backgroundColor="white"
-          outline="none"
-          _hover={{ background: "white", outline: "none" }}
-          _active={{ outline: "none" }}
-        >
+    <AccordionItem borderRadius="none" bg="whitesmoke">
+      <AccordionButton
+        p="0"
+        borderRadius="none"
+        shadow="sm"
+        outline="none"
+        backgroundColor={bg}
+        outline="none"
+        _hover={{ background: { bg }, outline: "none" }}
+        _active={{ outline: "none" }}
+        _focus={{ outline: "none" }}
+      >
+        <Flex direction="column" width="100%">
+          <HStack p="2">
+            <DisplayText divideBy={6}>
+              {first_name}&nbsp;{last_name}
+            </DisplayText>
+            <DisplayText divideBy={6}>{address?.city}</DisplayText>
+            <DisplayText divideBy={6}>{address?.state}</DisplayText>
+            <DisplayText divideBy={6}>{address?.zip_code}</DisplayText>
+            <DisplayText divideBy={6}>{referred_by}</DisplayText>
+            <DisplayText divideBy={6}>
+              <ButtonGroup spacing={2}>
+                {tabType == types.GET_REQUESTED_LEADS && (
+                  <>
+                    <IconButton
+                      w={4}
+                      h={4}
+                      p={4}
+                      onClick={() => onAccept(lead)}
+                      variant="outline"
+                      colorScheme="green"
+                      aria-label="Accept request"
+                      icon={<CheckIcon />}
+                    />
+                    <IconButton
+                      w={4}
+                      h={4}
+                      p={4}
+                      onClick={(e) => onReject(e, lead)}
+                      variant="outline"
+                      colorScheme="red"
+                      aria-label="Reject request"
+                      icon={<CloseIcon />}
+                    />
+                  </>
+                )}
+              </ButtonGroup>
+            </DisplayText>
+          </HStack>
           <Box flex="1" textAlign="left">
             <Flex direction="column">
-              <Box fontSize="12px" fontWeight="600" color="blackAlpha.800">
-                {first_name}&nbsp;{last_name}
-              </Box>
-              <Flex
-                fontSize="12px"
-                fontWeight="600"
-                color="gray.400"
-                paddingTop="0.3rem"
-              >
-                <Box marginRight="1rem">Phn: {phone_no}</Box>
-                <Box marginRight="1rem">Email: {email}</Box>
-              </Flex>
+              {/* <Flex
+              fontSize="12px"
+              fontWeight="600"
+              color="gray.400"
+              paddingTop="0.3rem"
+            >
+              <Box marginRight="1rem">Phn: {phone_no}</Box>
+              <Box marginRight="1rem">Email: {email}</Box>
+            </Flex> */}
             </Flex>
           </Box>
-          <AccordionIcon />
-        </AccordionButton>
-      </Box>
-      <AccordionPanel pb={4}>
+        </Flex>
+      </AccordionButton>
+      <AccordionPanel pb={4} borderRadius="0">
         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
           <Flex
             fontSize="12px"
             direction="column"
             padding="1rem"
             background="white"
-            rounded="lg"
           >
             <Box fontStyle="14px" fontWeight="600">
               Address
@@ -100,27 +152,22 @@ const Lead = ({
             <Image src={address?.address_image} />
           </Box>
           <Flex
-            alignItems="center"
-            padding="1rem"
+            justifyItems="flex-start"
+            alignItems="flex-start"
             background="white"
             rounded="lg"
             overflow="hidden"
             justifyContent="flex-end"
             direction="column"
+            h="15rem"
+            p="1"
           >
-            {/* <Text marginBottom="1rem">Accept Request?</Text>
-            <Flex justifyContent="center">
-              <Button
-                backgroundColor="green.300"
-                color="green.900"
-                marginRight="2rem"
-              >
-                Accept
-              </Button>
-              <Button backgroundColor="red.300" color="red.900">
-                Reject
-              </Button>
-            </Flex> */}
+            <Text>Upload a radio image</Text>
+            <ImagePreview
+              my="1"
+              onChange={(e) => setRadioImage(e.target.files[0])}
+            />
+            <Button onClick={handleImageUpload}>Upload</Button>
           </Flex>
         </Grid>
         <Flex direction="column" mt="4">

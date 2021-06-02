@@ -1,4 +1,5 @@
 import Cookie from "js-cookie";
+import { makeQuery } from "../utils";
 
 const Apis = (() => {
   const baseUrl = process.env.NEXT_PUBLIC_API_DOMAIN;
@@ -22,12 +23,23 @@ const Apis = (() => {
         "Content-Type": "application/json",
       },
     });
+    if (res.status >= 400) return null;
     const data = await res.json();
     return data;
   };
 
-  const getLeadsList = async (currentPage = 1, PAGE_SIZE = 5) => {
-    const url = `${baseUrl}/api/v1/leads?page=${currentPage}&page_size=${PAGE_SIZE}&status=ON_HOLD`;
+  const getLeadsList = async (
+    currentPage = 1,
+    tabType = "ON_HOLD",
+    PAGE_SIZE = 5,
+    filters = {}
+  ) => {
+    let url = `${baseUrl}/api/v1/leads?page=${currentPage}&page_size=${PAGE_SIZE}&status=${tabType}`;
+
+    if (Object.keys(filters).length > 0) {
+      url = url + `&${makeQuery(filters)}`;
+    }
+
     const res = await fetch(url, {
       headers: {
         Authorization: `Token ${Cookie.get("token")}`,
@@ -64,12 +76,45 @@ const Apis = (() => {
     console.log(data);
   };
 
+  const rejectLead = async (id, payload) => {
+    // status=REJECTED
+    const url = `${baseUrl}/api/v1/leads/${id}`;
+    const res = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...payload,
+        status: "REJECTED",
+      }),
+      headers: {
+        Authorization: `Token ${Cookie.get("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return await res.json();
+  };
+
+  const uploadRadioImage = async (id, payload) => {
+    const url = `${baseUrl}/api/v1/leads/${id}`;
+    const res = await fetch(url, {
+      method: "PUT",
+      body: payload,
+      headers: {
+        Authorization: `Token ${Cookie.get("token")}`,
+      },
+    });
+
+    return await res.json();
+  };
+
   return {
     createLead,
     login,
     getLeadsList,
     logout,
     registerAdmin,
+    rejectLead,
+    uploadRadioImage,
   };
 })();
 

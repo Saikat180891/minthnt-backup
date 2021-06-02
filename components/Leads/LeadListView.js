@@ -1,13 +1,16 @@
-import { Box, Accordion, Flex } from "@chakra-ui/react";
+import { Box, Accordion } from "@chakra-ui/react";
 import React from "react";
-import tw from "twin.macro";
-import PaginationNavigator from "../PaginationNavigator";
 import Lead from "./Lead";
+import TableHeader from "./TableHeader";
+import ActionBar from "../ActionBar";
+import { filterOptions } from "./initialValues.model";
 
 const LeadListView = ({
+  tabType = "",
   leads = [],
-  onNext = () => {},
-  onPrevious = () => {},
+  onChange = () => {},
+  onReject = () => {},
+  onImageUpload = () => {},
 }) => {
   const [accordionIndexs, setAccordionIndexes] = React.useState([0]);
 
@@ -17,12 +20,25 @@ const LeadListView = ({
 
   return (
     <Box>
-      <Flex justifyContent="flex-end" mb="4">
-        <PaginationNavigator onNext={onNext} onPrevious={onPrevious} />
-      </Flex>
-      <Accordion defaultIndex={[0]} allowMultiple onChange={handleExpansion}>
-        {leads?.map((lead) => (
-          <Lead key={lead.id} {...lead} accordionIndexs={accordionIndexs} />
+      <ActionBar {...{ filterOptions, onChange }} />
+      <TableHeader />
+      <Accordion
+        borderRadius="none"
+        defaultIndex={[0]}
+        allowMultiple
+        onChange={handleExpansion}
+      >
+        {leads?.map((lead, i) => (
+          <Lead
+            key={lead.id}
+            index={i}
+            {...lead}
+            tabType={tabType}
+            lead={lead}
+            onReject={onReject}
+            onImageUpload={onImageUpload}
+            accordionIndexs={accordionIndexs}
+          />
         ))}
       </Accordion>
     </Box>

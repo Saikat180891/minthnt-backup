@@ -17,3 +17,18 @@ export const setAcceptedLeads = (payload) => (dispatch) =>
     type: types.GET_ACCEPTED_LEADS,
     payload,
   });
+
+export const addFilters = (payload) => (dispatch) => {
+  dispatch({
+    type: types.ADD_FILTER,
+    payload,
+  });
+  console.log(payload);
+};
+
+export const removeFilter = (key) => (dispatch) => {
+  dispatch({
+    type: types.REMOVE_FILTER,
+    payload: key,
+  });
+};

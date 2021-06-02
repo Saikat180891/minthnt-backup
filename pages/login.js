@@ -25,6 +25,7 @@ const LoginPage = ({ setUser, isLoggedIn }) => {
   const handleSubmit = async (payload) => {
     try {
       const res = await Apis.login(payload);
+      if (!res) throw Error({ error: "Invalid Credentials" });
       Cookie.set("token", `${res?.token}`, { expires: res?.expires });
       setUser({ ...res, isLoggedIn: true });
       setTimeout(() => router.push("/"));
