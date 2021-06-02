@@ -1,4 +1,4 @@
-import { Button as ChakraButton } from "@chakra-ui/icons";
+import { Button as ChakraButton } from "@chakra-ui/react";
 
 const Button = ({ children, ...rest }) => {
   return (
