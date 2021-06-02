@@ -170,33 +170,35 @@ const Lead = ({
             <Button onClick={handleImageUpload}>Upload</Button>
           </Flex>
         </Grid>
-        <Flex direction="column" mt="4">
-          {misc.map((q, i) => (
-            <Flex
-              bg="white"
-              p="4"
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              direction="column"
-              key={i}
-              fontSize="sm"
-              rounded="lg"
-            >
-              <Box>{q.ques}</Box>
-              <Box
-                rounded="md"
-                px="3"
-                py="1"
-                mt="1"
-                fontWeight="600"
-                bg={q.ans === true ? "green.300" : "red.300"}
-                color="white"
+        {misc && (
+          <Flex direction="column" mt="4">
+            {misc?.map((q, i) => (
+              <Flex
+                bg="white"
+                p="4"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                direction="column"
+                key={i}
+                fontSize="sm"
+                rounded="lg"
               >
-                {q.ans === true ? "Yes" : "No"}
-              </Box>
-            </Flex>
-          ))}
-        </Flex>
+                <Box>{q.ques}</Box>
+                <Box
+                  rounded="md"
+                  px="3"
+                  py="1"
+                  mt="1"
+                  fontWeight="600"
+                  bg={q.ans === true ? "green.300" : "red.300"}
+                  color="white"
+                >
+                  {q.ans === true ? "Yes" : "No"}
+                </Box>
+              </Flex>
+            ))}
+          </Flex>
+        )}
       </AccordionPanel>
     </AccordionItem>
   );
