@@ -21,9 +21,11 @@ const RequestedLeads = ({
     if (!ref?.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
+        console.log(filters);
         if (entry.isIntersecting) {
           Apis.getLeadsList(currentPage, tabType, PAGE_SIZE, filters).then(
             (data) => {
+              console.log(filters);
               if (data?.results) {
                 setRequestedLeads({
                   leads: data?.results || [],
@@ -38,7 +40,7 @@ const RequestedLeads = ({
           );
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0 }
     );
     observer.observe(ref.current);
     return () => {
