@@ -38,7 +38,9 @@ const Lead = ({
   onAccept = () => {},
   onImageUpload = () => {},
 }) => {
-  const [misc, setMisc] = React.useState(JSON.parse(miscellaneous_questions));
+  const [misc, setMisc] = React.useState(
+    miscellaneous_questions ? JSON.parse(miscellaneous_questions) : null
+  );
   const [bg, setBg] = React.useState(
     index % 2 === 0 ? "white" : "blackAlpha.100"
   );
@@ -78,7 +80,7 @@ const Lead = ({
                       w={4}
                       h={4}
                       p={4}
-                      onClick={() => onAccept(lead)}
+                      onClick={(e) => onAccept(e, lead)}
                       variant="outline"
                       colorScheme="green"
                       aria-label="Accept request"

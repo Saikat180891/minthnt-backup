@@ -28,7 +28,7 @@ const LoginPage = ({ setUser, isLoggedIn }) => {
       if (!res) throw Error({ error: "Invalid Credentials" });
       Cookie.set("token", `${res?.token}`, { expires: res?.expires });
       setUser({ ...res, isLoggedIn: true });
-      setTimeout(() => router.push("/"));
+      setTimeout(() => router.push("/"), 500);
     } catch (err) {
       console.log(err);
     }

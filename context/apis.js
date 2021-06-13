@@ -3,6 +3,13 @@ import { makeQuery } from "../utils";
 
 const Apis = (() => {
   const baseUrl = process.env.NEXT_PUBLIC_API_DOMAIN;
+  const headers = {
+    headers: {
+      Authorization: `Token ${Cookie.get("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
   const createLead = async (payload) => {
     const url = `${baseUrl}/api/v1/leads`;
     const res = await fetch(url, {
@@ -25,7 +32,7 @@ const Apis = (() => {
     });
     if (res.status >= 400) return null;
     const data = await res.json();
-    return data;
+    return data?.data;
   };
 
   const getLeadsList = async (
@@ -94,6 +101,14 @@ const Apis = (() => {
     return await res.json();
   };
 
+  const acceptLead = async (id) => {
+    const url = `${baseUrl}/api/v1/leads/${id}/accept_leads`;
+    const res = await fetch(url, {
+      ...headers,
+    });
+    return await res.json();
+  };
+
   const uploadRadioImage = async (id, payload) => {
     const url = `${baseUrl}/api/v1/leads/${id}`;
     const res = await fetch(url, {
@@ -115,6 +130,7 @@ const Apis = (() => {
     registerAdmin,
     rejectLead,
     uploadRadioImage,
+    acceptLead,
   };
 })();
 

@@ -10,7 +10,9 @@ const LeadListView = ({
   leads = [],
   onChange = () => {},
   onReject = () => {},
+  onAccept = () => {},
   onImageUpload = () => {},
+  isLoading = false,
 }) => {
   const [accordionIndexs, setAccordionIndexes] = React.useState([0]);
 
@@ -20,27 +22,34 @@ const LeadListView = ({
 
   return (
     <Box>
-      <ActionBar {...{ filterOptions, onChange }} />
-      <TableHeader />
-      <Accordion
-        borderRadius="none"
-        defaultIndex={[0]}
-        allowMultiple
-        onChange={handleExpansion}
-      >
-        {leads?.map((lead, i) => (
-          <Lead
-            key={lead.id}
-            index={i}
-            {...lead}
-            tabType={tabType}
-            lead={lead}
-            onReject={onReject}
-            onImageUpload={onImageUpload}
-            accordionIndexs={accordionIndexs}
-          />
-        ))}
-      </Accordion>
+      {isLoading ? (
+        "Loading..."
+      ) : (
+        <>
+          <ActionBar {...{ filterOptions, onChange }} />
+          <TableHeader />
+          <Accordion
+            borderRadius="none"
+            defaultIndex={[0]}
+            allowMultiple
+            onChange={handleExpansion}
+          >
+            {leads?.map((lead, i) => (
+              <Lead
+                key={lead.id}
+                index={i}
+                {...lead}
+                tabType={tabType}
+                lead={lead}
+                onReject={onReject}
+                onAccept={onAccept}
+                onImageUpload={onImageUpload}
+                accordionIndexs={accordionIndexs}
+              />
+            ))}
+          </Accordion>
+        </>
+      )}
     </Box>
   );
 };

@@ -16,6 +16,7 @@ const RequestedLeads = ({
   const ref = React.useRef();
   const { changePage, setIsLastPage, currentPage, isLastPage } =
     usePagination();
+  const [isLoading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (!ref?.current) return;
@@ -23,12 +24,13 @@ const RequestedLeads = ({
       ([entry]) => {
         console.log(filters);
         if (entry.isIntersecting) {
+          setLoading(true);
           Apis.getLeadsList(currentPage, tabType, PAGE_SIZE, filters).then(
             (data) => {
               console.log(filters);
-              if (data?.results) {
+              if (data?.data?.results) {
                 setRequestedLeads({
-                  leads: data?.results || [],
+                  leads: data?.data?.results || [],
                   currentPage,
                   isLastPage,
                 });
@@ -36,6 +38,7 @@ const RequestedLeads = ({
                   setIsLastPage(true);
                 }
               }
+              setLoading(false);
             }
           );
         }
@@ -72,12 +75,19 @@ const RequestedLeads = ({
     Apis.uploadRadioImage(lead?.id, formdata).then((res) => console.log(res));
   };
 
+  const handleAcceptance = (e, lead) => {
+    e.preventDefault();
+    Apis.acceptLead(lead?.id).then((res) => window.location.reload());
+  };
+
   return (
     <Box ref={ref}>
       <LeadListView
         tabType={tabType}
         leads={leads}
+        isLoading={isLoading}
         onNext={() => changePage(1)}
+        onAccept={handleAcceptance}
         onPrevious={() => changePage(-1)}
         onReject={handleRejection}
         onChange={handleQueryFiltration}
