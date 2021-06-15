@@ -5,6 +5,8 @@ import { setRequestedLeads } from "../../store/actions/leads.actions";
 import LeadListView from "./LeadListView";
 import { usePagination } from "../PaginationNavigator/usePagination";
 import { Box, TabPanel } from "@chakra-ui//react";
+import { useToast } from "@chakra-ui/react"
+
 
 const PAGE_SIZE = 5;
 const RequestedLeads = ({
@@ -27,8 +29,8 @@ const RequestedLeads = ({
           setLoading(true);
           Apis.getLeadsList(currentPage, tabType, PAGE_SIZE, filters).then(
             (data) => {
-              console.log(filters);
               if (data?.data?.results) {
+                console.log(data?.data?.results);
                 setRequestedLeads({
                   leads: data?.data?.results || [],
                   currentPage,
@@ -57,7 +59,28 @@ const RequestedLeads = ({
 
   const handleRejection = async (e, lead) => {
     e.preventDefault();
-    const res = await Apis.rejectLead(lead?.id, lead);
+    delete lead.radio_image;
+    const res = await Apis.rejectLead(lead?.id, lead).then(res => {
+      if(res?.status=="FAILURE") {
+        toast({
+          title: "Lead Rejection Failed",
+          description: "",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
+      }
+      else if(res?.status=="SUCCESS") {
+        toast({
+          title: "Lead Rejected",
+          description: "Check the rejected tab",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
+      }
+
+    });
     console.log(res);
   };
 
@@ -72,12 +95,35 @@ const RequestedLeads = ({
   const handleImageUpload = (img, lead) => {
     const formdata = jsonToFormData(lead);
     formdata.set("radio_image", img);
-    Apis.uploadRadioImage(lead?.id, formdata).then((res) => console.log(res));
+    Apis.uploadRadioImage(lead?.id, formdata).then((res) => {})
   };
+  const toast = useToast();
 
   const handleAcceptance = (e, lead) => {
     e.preventDefault();
-    Apis.acceptLead(lead?.id).then((res) => window.location.reload());
+    delete lead.radio_image;
+    Apis.acceptLead(lead?.id).then((res) => {
+      if(res?.status=="FAILURE") {
+        toast({
+          title: "Lead Acceptance Failed",
+          description: res?.errors[0]?.display_msg,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
+      }
+      else if(res?.status=="SUCCESS") {
+        toast({
+          title: "Lead Accepted",
+          description: "Lead accepted. Check the Accepted tab.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })
+      }
+
+
+    });
   };
 
   return (

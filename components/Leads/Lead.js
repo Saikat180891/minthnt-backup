@@ -26,8 +26,9 @@ import ImagePreview from "../ImagePreview";
 const Lead = ({
   first_name = "",
   last_name = "",
-  phone_no = "",
+  phone_number = "",
   email = "",
+  radio_image="",
   address = {},
   miscellaneous_questions = "",
   index = 0,
@@ -123,8 +124,21 @@ const Lead = ({
             direction="column"
             padding="1rem"
             background="white"
-          >
-            <Box fontStyle="14px" fontWeight="600">
+          > 
+          <Box fontStyle="14px" fontWeight="600">
+          Contact
+        </Box>
+        <Flex direction="column" color="gray.500">
+          <Flex justifyContent="space-between">
+            <Box>Phone Nunber</Box>
+            {phone_number}
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Box>Email</Box>
+            {email}
+          </Flex>
+          </Flex>
+            <Box fontStyle="14px"  mt="4" fontWeight="600">
               Address
             </Box>
             <Flex direction="column" color="gray.500">
@@ -149,6 +163,7 @@ const Lead = ({
                 {address?.state}
               </Flex>
             </Flex>
+           
           </Flex>
           <Box padding="1rem" background="white" rounded="lg" overflow="hidden">
             <Image src={address?.address_image} />
@@ -163,13 +178,13 @@ const Lead = ({
             direction="column"
             h="15rem"
             p="1"
-          >
+          >{radio_image ?<img src={radio_image}/>:<>
             <Text>Upload a radio image</Text>
             <ImagePreview
               my="1"
               onChange={(e) => setRadioImage(e.target.files[0])}
             />
-            <Button onClick={handleImageUpload}>Upload</Button>
+            <Button onClick={handleImageUpload}>Upload</Button></>}
           </Flex>
         </Grid>
         {misc && (

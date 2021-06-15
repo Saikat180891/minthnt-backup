@@ -25,7 +25,7 @@ export const filterOptions = [
   },
   {
     label: "City",
-    value: "address__city__startswith",
+    value: "address__city__istartswith",
   },
   {
     label: "Zip Code",
