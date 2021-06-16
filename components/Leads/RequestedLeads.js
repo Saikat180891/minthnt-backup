@@ -73,8 +73,8 @@ const RequestedLeads = ({
       else if(res?.status=="SUCCESS") {
         toast({
           title: "Lead Rejected",
-          description: "Check the rejected tab",
-          status: "error",
+          description: "Check the rejected tab.",
+          status: "success",
           duration: 9000,
           isClosable: true,
         })
@@ -116,7 +116,7 @@ const RequestedLeads = ({
         toast({
           title: "Lead Accepted",
           description: "Lead accepted. Check the Accepted tab.",
-          status: "error",
+          status: "success",
           duration: 9000,
           isClosable: true,
         })
