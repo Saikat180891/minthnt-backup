@@ -24,6 +24,8 @@ const RegisterAdmin = () => {
   const registerAdmin = async (payload) => {
     try {
       const data = await Apis.registerAdmin(payload);
+      console.log(data?.errors);
+      if (data?.status=="SUCCESS") {
       toast({
         title: "Account created.",
         description: "We've created your account for you.",
@@ -31,14 +33,17 @@ const RegisterAdmin = () => {
         duration: 5000,
         isClosable: true,
       });
-    } catch (err) {
+    }
+    else {      
       toast({
-        title: "Account creation failed",
-        description: "Something went wrong. Please try again later.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      title: "Account creation failed",
+      description: data?.errors?.[0]?.display_msg,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });}
+    } catch (err) {
+
     }
   };
   return (

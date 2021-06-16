@@ -80,7 +80,7 @@ const Apis = (() => {
       },
     });
     const data = await res.json();
-    console.log(data);
+    return data;
   };
 
   const rejectLead = async (id, payload) => {
