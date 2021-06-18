@@ -149,7 +149,7 @@ const Lead = ({
               </Flex>
               <Flex justifyContent="space-between">
                 <Box>Full Address</Box>
-                {address?.place_name}
+                <Text textAlign="right">{address?.place_name}</Text>
               </Flex>
               <Flex justifyContent="space-between">
                 <Box>Apartment/Unit Number</Box>
