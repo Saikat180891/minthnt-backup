@@ -38,6 +38,7 @@ const Lead = ({
   onReject = () => {},
   onAccept = () => {},
   onImageUpload = () => {},
+  email_link = 'mailto:'+email
 }) => {
   const [misc, setMisc] = React.useState(
     miscellaneous_questions ? JSON.parse(miscellaneous_questions) : null
@@ -133,9 +134,9 @@ const Lead = ({
             <Box>Phone Nunber</Box>
             {phone_number}
           </Flex>
-          <Flex justifyContent="space-between">
-            <Box>Email</Box>
-            {email}
+          <Flex justifyContent="space-between"  color="blue">
+            <Box color="gray.500">Email</Box>
+            <a href={email_link}>{email}</a>
           </Flex>
           </Flex>
             <Box fontStyle="14px"  mt="4" fontWeight="600">
@@ -147,20 +148,24 @@ const Lead = ({
                 {address?.floor_number}
               </Flex>
               <Flex justifyContent="space-between">
-                <Box>Street</Box>
-                {address?.street_address}
+                <Box>Full Address</Box>
+                {address?.place_name}
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Box>Apartment/Unit Number</Box>
+                {address?.apartment_info}
               </Flex>
               <Flex justifyContent="space-between">
                 <Box>City</Box>
                 {address?.city}
               </Flex>
               <Flex justifyContent="space-between">
-                <Box>Zip Code</Box>
-                {address?.zip_code}
-              </Flex>
-              <Flex justifyContent="space-between">
                 <Box>State</Box>
                 {address?.state}
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Box>Zip Code</Box>
+                {address?.zip_code}
               </Flex>
             </Flex>
            

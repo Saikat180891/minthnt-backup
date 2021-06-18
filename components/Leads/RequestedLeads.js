@@ -77,9 +77,17 @@ const RequestedLeads = ({
           status: "success",
           duration: 9000,
           isClosable: true,
-        })
+        });
+        const leadIndex = leads.indexOf(lead);
+        if (leadIndex > -1) {
+          leads.splice(leadIndex, 1);
+        }               
+         setRequestedLeads({
+          leads: [...leads],
+          currentPage,
+          isLastPage,
+        });
       }
-
     });
     console.log(res);
   };
@@ -111,6 +119,7 @@ const RequestedLeads = ({
           duration: 9000,
           isClosable: true,
         })
+
       }
       else if(res?.status=="SUCCESS") {
         toast({
@@ -119,7 +128,16 @@ const RequestedLeads = ({
           status: "success",
           duration: 9000,
           isClosable: true,
-        })
+        });
+        const leadIndex = leads.indexOf(lead);
+        if (leadIndex > -1) {
+          leads.splice(leadIndex, 1);
+        }               
+         setRequestedLeads({
+          leads: [...leads],
+          currentPage,
+          isLastPage,
+        });
       }
 
 
