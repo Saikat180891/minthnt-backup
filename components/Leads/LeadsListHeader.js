@@ -3,6 +3,7 @@ import { ArrowUpDownIcon } from "@chakra-ui/icons";
 import React from "react";
 import { sortBy } from "../../store/actions/leads.actions";
 import { connect } from "react-redux";
+import { sortkeys } from "./initialValues.model";
 
 export const columns = [
   "Name",
@@ -14,8 +15,6 @@ export const columns = [
 ];
 
 const TableHeader = ({ sortBy, sort }) => {
-  const [selected, setSelected] = React.useState(0);
-
   return (
     <Grid
       w="full"
@@ -30,12 +29,12 @@ const TableHeader = ({ sortBy, sort }) => {
           key={colName}
           fontWeight="600"
           textTransform="uppercase"
-          cursor="pointer"
+          cursor={sortkeys[colName] && "pointer"}
           pb="2"
-          color={sort === colName.toUpperCase() && "minthnt.green1"}
-          onClick={() => sortBy(colName.toUpperCase())}
+          color={sort === sortkeys[colName] && sort !== "" && "minthnt.green1"}
+          onClick={() => sortkeys[colName] && sortBy(sortkeys[colName])}
         >
-          <ArrowUpDownIcon height={3} /> {colName}
+          {sortkeys[colName] && <ArrowUpDownIcon height={3} />} {colName}
         </GridItem>
       ))}
     </Grid>

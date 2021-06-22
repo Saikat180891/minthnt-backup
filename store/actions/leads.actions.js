@@ -42,7 +42,7 @@ export const updateRadioImage = (id, image) => (dispatch) => {
 export const nextPage = () => (dispatch, getState) => {
   const leads = getState().leads;
   const { currentPage, itemsPerPage, totalCount } = leads;
-  if (currentPage * itemsPerPage <= totalCount) {
+  if (currentPage * itemsPerPage < totalCount) {
     dispatch({
       type: types.UPDATE_CURRENT_PAGE,
       payload: currentPage + 1,
@@ -69,3 +69,10 @@ export const sortBy =
       payload: key,
     });
   };
+
+export const removeLeads = (id) => (dispatch) => {
+  dispatch({
+    type: types.REMOVE_LEAD,
+    payload: id,
+  });
+};

@@ -9,9 +9,9 @@ const Toast = () => {
     toastObservable.subscribe(
       ({ title = "", description = "", status = "success" }) => {
         toast({
-          title: "Account created.",
-          description: "We've created your account for you.",
-          status: "success",
+          title: title,
+          description: description,
+          status: status,
           duration: 9000,
           isClosable: true,
           position: "top",

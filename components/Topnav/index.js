@@ -19,8 +19,9 @@ import Apis from "../../context/apis";
 import { useRouter } from "next/router";
 import Cookie from "js-cookie";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { connect } from "react-redux";
 
-const Topnav = () => {
+const Topnav = ({ user = {} }) => {
   const router = useRouter();
   const handleLogout = async () => {
     await Apis.logout();
@@ -45,7 +46,7 @@ const Topnav = () => {
       >
         <Flex alignItems="center">
           <Text mr="3" fontWeight="600">
-            Welcome, Saikat
+            Welcome, {user?.first_name}
           </Text>
           <Popover>
             <PopoverTrigger>
@@ -75,4 +76,10 @@ const Topnav = () => {
   );
 };
 
-export default Topnav;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+  };
+};
+
+export default connect(mapStateToProps, {})(Topnav);

@@ -55,74 +55,7 @@
 //     console.log(e);
 //   };
 
-//   const handleRejection = async (e, lead) => {
-//     e.preventDefault();
-//     delete lead.radio_image;
-//     const res = await Apis.rejectLead(lead?.id, lead).then((res) => {
-//       if (res?.status == "FAILURE") {
-//         toast({
-//           title: "Lead Rejection Failed",
-//           description: "",
-//           status: "error",
-//           duration: 9000,
-//           isClosable: true,
-//         });
-//       } else if (res?.status == "SUCCESS") {
-//         toast({
-//           title: "Lead Rejected",
-//           description: "Check the rejected tab.",
-//           status: "success",
-//           duration: 9000,
-//           isClosable: true,
-//         });
-//         const leadIndex = leads.indexOf(lead);
-//         if (leadIndex > -1) {
-//           leads.splice(leadIndex, 1);
-//         }
-//         setRequestedLeads({
-//           leads: [...leads],
-//           currentPage,
-//           isLastPage,
-//         });
-//       }
-//     });
-//     console.log(res);
-//   };
-
 //   const toast = useToast();
-
-//   const handleAcceptance = (e, lead) => {
-//     e.preventDefault();
-//     delete lead.radio_image;
-//     Apis.acceptLead(lead?.id).then((res) => {
-//       if (res?.status == "FAILURE") {
-//         toast({
-//           title: "Lead Acceptance Failed",
-//           description: res?.errors[0]?.display_msg,
-//           status: "error",
-//           duration: 9000,
-//           isClosable: true,
-//         });
-//       } else if (res?.status == "SUCCESS") {
-//         toast({
-//           title: "Lead Accepted",
-//           description: "Lead accepted. Check the Accepted tab.",
-//           status: "success",
-//           duration: 9000,
-//           isClosable: true,
-//         });
-//         const leadIndex = leads.indexOf(lead);
-//         if (leadIndex > -1) {
-//           leads.splice(leadIndex, 1);
-//         }
-//         setRequestedLeads({
-//           leads: [...leads],
-//           currentPage,
-//           isLastPage,
-//         });
-//       }
-//     });
-//   };
 
 //   return (
 //     <Box ref={ref}>
@@ -164,7 +97,10 @@ import * as Loaders from "../../store/types/loaderTypes";
 import { BeatLoader } from "react-spinners";
 import Apis, { asyncFetcher } from "../../context/apis";
 import { jsonToFormData } from "../../utils";
-import { updateRadioImage } from "../../store/actions/leads.actions";
+import {
+  updateRadioImage,
+  removeLeads,
+} from "../../store/actions/leads.actions";
 import { stopLoader, startLoader } from "../../store/actions/loader.action";
 
 const LeadList = ({
@@ -175,6 +111,7 @@ const LeadList = ({
   updateRadioImage = () => {},
   startLoader = () => {},
   stopLoader = () => {},
+  removeLeads = () => {},
   activeTab = ON_HOLD,
   loaders = {},
   sort = "",
@@ -189,6 +126,67 @@ const LeadList = ({
     const data = await asyncFetcher(Apis.uploadRadioImage(lead?.id, formdata));
     updateRadioImage(data?.id, data?.radio_image);
     stopLoader("RF_IMAGE_LOADER");
+  };
+
+  const handleRejection = async (lead) => {
+    delete lead.radio_image;
+    try {
+      startLoader("PERFORMING_ACTION");
+      const data = await asyncFetcher(Apis.rejectLead(lead?.id, lead), {
+        showError: true,
+      });
+      stopLoader("PERFORMING_ACTION");
+      if (data?.id && data?.status === "REJECTED") {
+        removeLeads(lead?.id);
+      }
+    } catch (err) {
+      stopLoader("PERFORMING_ACTION");
+    }
+  };
+
+  const handleAcceptance = async (lead) => {
+    try {
+      startLoader("PERFORMING_ACTION");
+      const data = await asyncFetcher(Apis.acceptLead(lead?.id), {
+        showError: true,
+      });
+      stopLoader("PERFORMING_ACTION");
+      removeLeads(lead?.id);
+    } catch (err) {
+      stopLoader("PERFORMING_ACTION");
+    }
+  };
+
+  const handleMoveToOnHold = async (lead) => {
+    delete lead.radio_image;
+    try {
+      startLoader("PERFORMING_ACTION");
+      const data = await asyncFetcher(Apis.moveToOnHold(lead?.id, lead), {
+        showError: true,
+      });
+      stopLoader("PERFORMING_ACTION");
+      if (data?.id && data?.status === "ON_HOLD") {
+        removeLeads(lead?.id);
+      }
+    } catch (err) {
+      stopLoader("PERFORMING_ACTION");
+    }
+  };
+
+  const handleMoveToWaitlisted = async (lead) => {
+    delete lead.radio_image;
+    try {
+      startLoader("PERFORMING_ACTION");
+      const data = await asyncFetcher(Apis.waitlistedLead(lead?.id, lead), {
+        showError: true,
+      });
+      stopLoader("PERFORMING_ACTION");
+      if (data?.id && data?.status === "WAITLISTED") {
+        removeLeads(lead?.id);
+      }
+    } catch (err) {
+      stopLoader("PERFORMING_ACTION");
+    }
   };
 
   React.useEffect(() => {
@@ -208,6 +206,7 @@ const LeadList = ({
     <Box w="full">
       <Box ref={actionRef}>
         <ActionBar {...{ filterOptions, onChange }} />
+        <LeadsListHeader />
       </Box>
       {loaders?.[Loaders.GET_LEAD_LIST] ? (
         <Flex
@@ -222,8 +221,6 @@ const LeadList = ({
         </Flex>
       ) : (
         <>
-          {loaders?.[Loaders?.GET_LEAD_LIST] && "Loading"}
-          <LeadsListHeader />
           <Accordion borderRadius="none" defaultIndex={[0]} allowMultiple>
             {leads?.map((lead, i) => (
               <Lead
@@ -233,9 +230,11 @@ const LeadList = ({
                 lead={lead}
                 loaders={loaders}
                 activeTab={activeTab}
-                onReject={onReject}
-                onAccept={onAccept}
+                onReject={handleRejection}
+                onAccept={handleAcceptance}
                 onImageUpload={handleImageUpload}
+                onMoveToOnHold={handleMoveToOnHold}
+                onMoveToWaitlisted={handleMoveToWaitlisted}
                 sort={sort}
               />
             ))}
@@ -262,4 +261,5 @@ export default connect(mapStateToProps, {
   updateRadioImage,
   stopLoader,
   startLoader,
+  removeLeads,
 })(LeadList);

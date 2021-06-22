@@ -4,20 +4,27 @@ import { toast } from "@/Toast";
 
 export const asyncFetcher = async (
   api,
-  showSuccess = false,
-  showError = false
+  options = { showSuccess: false, showError: false }
 ) => {
-  const data = await api;
-  if (data?.status === "SUCCESS" && showSuccess) {
+  const res = await api;
+
+  if (res?.status >= 400) {
+    const data = await res.json();
+    if (data?.status === "FAILURE" && options.showError) {
+      toast.next({
+        title: data?.status,
+        description: data?.errors?.[0]?.display_msg,
+        status: "error",
+      });
+    }
+    throw new Error(JSON.stringify({ errors: data?.errors }));
+  }
+
+  const data = await res.json();
+  if (data?.status === "SUCCESS" && options.showSuccess) {
     toast.next({
       title: data?.status,
       description: data?.display_msg,
-    });
-  } else if (data?.status === "FAILURE" && showError) {
-    toast.next({
-      title: data?.status,
-      description: data?.display_msg,
-      status: "error",
     });
   }
   return data?.data;
@@ -71,16 +78,16 @@ const Apis = (() => {
     }
 
     if (sort) {
-      url = url + `&sort_by=${sort.toLowerCase().replace(" ", "_")}`;
+      url = url + `&ordering=${sort.toLowerCase().replace(" ", "_")}`;
     }
 
-    const res = await fetch(url, {
+    return await fetch(url, {
       headers: {
         Authorization: `Token ${Cookie.get("token")}`,
       },
     });
-    const data = await res.json();
-    return data;
+    // const data = await res.json();
+    // return data;
   };
 
   const logout = async () => {
@@ -111,9 +118,8 @@ const Apis = (() => {
   };
 
   const rejectLead = async (id, payload) => {
-    // status=REJECTED
     const url = `${baseUrl}/api/v1/leads/${id}`;
-    const res = await fetch(url, {
+    return await fetch(url, {
       method: "PUT",
       body: JSON.stringify({
         ...payload,
@@ -124,16 +130,13 @@ const Apis = (() => {
         "Content-Type": "application/json",
       },
     });
-
-    return await res.json();
   };
 
   const acceptLead = async (id) => {
     const url = `${baseUrl}/api/v1/leads/${id}/accept_leads`;
-    const res = await fetch(url, {
+    return await fetch(url, {
       ...headers,
     });
-    return await res.json();
   };
 
   const uploadRadioImage = async (id, payload) => {
@@ -149,6 +152,45 @@ const Apis = (() => {
     return await res.json();
   };
 
+  const appData = async () => {
+    const url = `${baseUrl}/api/v1/app_data`;
+    return await fetch(url, {
+      headers: {
+        Authorization: `Token ${Cookie.get("token")}`,
+      },
+    });
+  };
+
+  const waitlistedLead = async (id, payload) => {
+    const url = `${baseUrl}/api/v1/leads/${id}`;
+    return await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...payload,
+        status: "WAITLISTED",
+      }),
+      headers: {
+        Authorization: `Token ${Cookie.get("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  const moveToOnHold = async (id, payload) => {
+    const url = `${baseUrl}/api/v1/leads/${id}`;
+    return await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...payload,
+        status: "ON_HOLD",
+      }),
+      headers: {
+        Authorization: `Token ${Cookie.get("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
   return {
     createLead,
     login,
@@ -158,6 +200,9 @@ const Apis = (() => {
     rejectLead,
     uploadRadioImage,
     acceptLead,
+    appData,
+    waitlistedLead,
+    moveToOnHold,
   };
 })();
 

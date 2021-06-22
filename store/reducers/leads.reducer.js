@@ -12,6 +12,7 @@ const initialLeadState = {
   itemsPerPage: ITEMS_PER_PAGE,
   leads: [],
   sort: "",
+  sortType: 0,
 };
 
 export const leadReducer = (state = initialLeadState, action) => {
@@ -72,10 +73,28 @@ export const leadReducer = (state = initialLeadState, action) => {
         currentPage: action.payload,
       };
     case types.SET_SORT:
-      const key = action.payload;
+      let key = action.payload;
+      const lastKey = state.sort;
+      let sortCount = state.sortType;
+      sortCount++;
+      // 1 bug is here
+      if (sortCount > 2) {
+        sortCount = 0;
+        key = "";
+      }
+      if (key !== lastKey) {
+        sortCount = 0;
+      }
+      console.log(key, sortCount);
       return {
         ...state,
-        sort: state.sort === key ? "" : key,
+        sort: key,
+        sortType: sortCount,
+      };
+    case types.REMOVE_LEAD:
+      return {
+        ...state,
+        leads: state.leads.filter((lead) => lead.id !== action.payload),
       };
     default:
       return state;

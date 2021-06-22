@@ -37,6 +37,15 @@ export const filterOptions = [
   },
 ];
 
+export const sortkeys = {
+  Name: "first_name",
+  City: "address__city",
+  State: "address__state",
+  Zip: "address__zip_code",
+  "Referred By": "referred_by",
+  Status: "",
+};
+
 export function getLabelFromValue(value, options = []) {
   const selectedOption = options.find((option) => option?.value === value);
   return selectedOption?.label;

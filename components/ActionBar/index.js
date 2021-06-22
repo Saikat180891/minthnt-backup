@@ -11,6 +11,7 @@ import {
   WrapItem,
   GridItem,
   Grid,
+  Text,
 } from "@chakra-ui/react";
 import React from "react";
 import tw from "twin.macro";
@@ -43,6 +44,9 @@ const ActionBar = ({
   hideFilter = false,
   nextPage = () => {},
   previousPage = () => {},
+  currentPage = 1,
+  itemsPerPage = 10,
+  totalCount = 0,
 }) => {
   const [filter, setFilter] = React.useState();
 
@@ -59,8 +63,14 @@ const ActionBar = ({
           </DropdownMenu>
         )}
       </GridItem>
-      <GridItem colSpan="9">
+      <GridItem colSpan="7">
         {!hideFilter && <AutoComplete onChange={handleFilterQuery} />}
+      </GridItem>
+      <GridItem colSpan="2" justifySelf="end" alignSelf="center">
+        <Text fontSize="12">
+          Showing page {currentPage}&nbsp;of&nbsp;
+          {Math.ceil(totalCount / itemsPerPage)}
+        </Text>
       </GridItem>
       <GridItem colSpan="1">
         <HStack>
@@ -96,6 +106,9 @@ const ActionBar = ({
 const mapStateToProps = (state) => {
   return {
     filters: state.leads.others.filters,
+    currentPage: state.leads.currentPage,
+    itemsPerPage: state.leads.itemsPerPage,
+    totalCount: state.leads.totalCount,
   };
 };
 

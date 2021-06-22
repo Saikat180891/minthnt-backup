@@ -38,7 +38,9 @@ const Lead = ({
   loaders = {},
   onReject = () => {},
   onAccept = () => {},
+  onMoveToOnHold = () => {},
   onImageUpload = () => {},
+  onMoveToWaitlisted = () => {},
   sort = "",
 }) => {
   const [misc] = React.useState(
@@ -302,7 +304,7 @@ const Lead = ({
               {activeTab === types.ON_HOLD && (
                 <>
                   <Button
-                    onClick={(e) => onAccept(e, lead)}
+                    onClick={(e) => onAccept(lead)}
                     bg="green.500"
                     outline="none"
                     border="none"
@@ -326,7 +328,7 @@ const Lead = ({
                     Accept
                   </Button>
                   <Button
-                    onClick={(e) => onReject(e, lead)}
+                    onClick={(e) => onReject(lead)}
                     bg="red.500"
                     outline="none"
                     border="none"
@@ -337,27 +339,67 @@ const Lead = ({
                   >
                     Reject
                   </Button>
+                  <Button
+                    onClick={(e) => onMoveToWaitlisted(lead)}
+                    bg="yellow.500"
+                    outline="none"
+                    border="none"
+                    borderRadius="0 1rem 0 1rem"
+                    _hover={{
+                      bg: "yellow.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _active={{
+                      bg: "yellow.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _focus={{
+                      bg: "yellow.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                  >
+                    Send to waitlisted
+                  </Button>
                 </>
               )}
-              {activeTab !== types.ON_HOLD && (
-                <Button
-                  onClick={(e) => onReject(e, lead)}
-                  bg="orange.500"
-                  outline="none"
-                  border="none"
-                  borderRadius="0 1rem 0 1rem"
-                  _hover={{ bg: "orange.500", outline: "none", border: "none" }}
-                  _active={{
-                    bg: "orange.500",
-                    outline: "none",
-                    border: "none",
-                  }}
-                  _focus={{ bg: "orange.500", outline: "none", border: "none" }}
-                >
-                  Move to On Hold
-                </Button>
-              )}
+              {activeTab !== types.ACCEPTED_LEADS &&
+                activeTab !== types.ON_HOLD && (
+                  <Button
+                    onClick={(e) => onMoveToOnHold(lead)}
+                    bg="orange.500"
+                    outline="none"
+                    border="none"
+                    borderRadius="0 1rem 0 1rem"
+                    _hover={{
+                      bg: "orange.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _active={{
+                      bg: "orange.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _focus={{
+                      bg: "orange.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                  >
+                    Move to On Hold
+                  </Button>
+                )}
             </HStack>
+            <Flex
+              mt="4"
+              w="full"
+              visibility={loaders["PERFORMING_ACTION"] ? "visible" : "hidden"}
+            >
+              <BarLoader color="#fff" width="100%" />
+            </Flex>
           </GridItem>
         </Grid>
         <Modal show={modalImage}>
