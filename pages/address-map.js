@@ -20,8 +20,11 @@ const Index = () => {
       zoom: 12,
       center: [parseFloat(lat), parseFloat(lng)],
     });
-    map.on("load", function () {
-      /* Sample feature from the `examples.8fgz4egr` tileset:
+    var marker1 = new mapboxgl.Marker({ color: "#01E7AD" })
+      .setLngLat([parseFloat(lat), parseFloat(lng)])
+      .addTo(map);
+    // map.on("load", function () {
+    /* Sample feature from the `examples.8fgz4egr` tileset:
         {
         "type": "Feature",
         "properties": {
@@ -33,54 +36,54 @@ const Index = () => {
         }
         }
         */
-      map.addSource("points", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: [parseFloat(lat), parseFloat(lng)],
-              },
-            },
-          ],
-        },
-      });
-      // map.addLayer({
-      //   id: "population",
-      //   type: "circle",
-      //   source: "ethnicity",
-      //   "source-layer": "sf2010",
-      //   paint: {
-      //     // make circles larger as the user zooms from z12 to z22
-      //     "circle-radius": {
-      //       base: 1.75,
-      //       stops: [
-      //         [12, 2],
-      //         [22, 180],
-      //       ],
-      //     },
-      //     // color circles by ethnicity, using a match expression
-      //     // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
-      //     "circle-color": [
-      //       "match",
-      //       ["get", "ethnicity"],
-      //       "White",
-      //       "#fbb03b",
-      //       "Black",
-      //       "#223b53",
-      //       "Hispanic",
-      //       "#e55e5e",
-      //       "Asian",
-      //       "#3bb2d0",
-      //       /* other */ "#ccc",
-      //     ],
-      //   },
-      // });
-    });
+    // map.addSource("points", {
+    //   type: "geojson",
+    //   data: {
+    //     type: "FeatureCollection",
+    //     features: [
+    //       {
+    //         type: "Feature",
+    //         properties: {},
+    //         geometry: {
+    //           type: "Point",
+    //           coordinates: [parseFloat(lat), parseFloat(lng)],
+    //         },
+    //       },
+    //     ],
+    //   },
+    // });
+    // map.addLayer({
+    //   id: "population",
+    //   type: "circle",
+    //   source: "ethnicity",
+    //   "source-layer": "sf2010",
+    //   paint: {
+    //     // make circles larger as the user zooms from z12 to z22
+    //     "circle-radius": {
+    //       base: 1.75,
+    //       stops: [
+    //         [12, 2],
+    //         [22, 180],
+    //       ],
+    //     },
+    //     // color circles by ethnicity, using a match expression
+    //     // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
+    //     "circle-color": [
+    //       "match",
+    //       ["get", "ethnicity"],
+    //       "White",
+    //       "#fbb03b",
+    //       "Black",
+    //       "#223b53",
+    //       "Hispanic",
+    //       "#e55e5e",
+    //       "Asian",
+    //       "#3bb2d0",
+    //       /* other */ "#ccc",
+    //     ],
+    //   },
+    // });
+    // });
   }, []);
 
   return (
