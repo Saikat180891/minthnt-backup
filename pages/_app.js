@@ -3,7 +3,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { Provider } from "react-redux";
 import { useStore } from "../store";
+import { theme } from "../theme";
 import Head from "next/head";
+import Toast from "@/Toast";
 
 const App = ({ Component, pageProps }) => {
   const store = useStore(pageProps.initialReduxState);
@@ -15,9 +17,10 @@ const App = ({ Component, pageProps }) => {
           rel="stylesheet"
         />
       </Head>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <GlobalStyles />
         <Component {...pageProps} />
+        <Toast />
       </ChakraProvider>
     </Provider>
   );

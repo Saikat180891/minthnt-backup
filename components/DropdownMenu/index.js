@@ -1,4 +1,11 @@
-import { Menu, MenuButton, MenuList, MenuItem, Flex } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Flex,
+  Text,
+} from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import React from "react";
 import Button from "@/Button";
@@ -18,23 +25,31 @@ const DropdownMenu = ({
   };
 
   return (
-    <Menu h="full">
+    <Menu h="full" w={w}>
       <MenuButton
         w={w}
         h="full"
-        border="1px solid"
-        borderColor="gray.300"
-        borderRadius="md"
         px="0.5rem"
+        border="none"
+        bg="minthnt.gray3"
+        borderRadius="md"
         {...rest}
       >
         <Flex justifyContent="space-between" alignItems="center">
-          {selectedOption} <ChevronDownIcon />
+          {selectedOption}{" "}
+          <Text color="minthnt.green1">
+            <ChevronDownIcon />
+          </Text>
         </Flex>
       </MenuButton>
-      <MenuList>
+      <MenuList bg="minthnt.gray3" border="none" shadow="dark-lg" w="full">
         {options.map((option, i) => (
-          <MenuItem key={i} onClick={() => handleOptionChange(option)}>
+          <MenuItem
+            _focus={{ bg: "minthnt.gray2", color: "minthnt.gray3" }}
+            _hover={{ bg: "minthnt.gray2", color: "minthnt.gray3" }}
+            key={i}
+            onClick={() => handleOptionChange(option)}
+          >
             {option?.label}
           </MenuItem>
         ))}

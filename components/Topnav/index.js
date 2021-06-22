@@ -10,10 +10,15 @@ import {
   PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
+  Grid,
+  GridItem,
+  Image,
+  Text,
 } from "@chakra-ui/react";
 import Apis from "../../context/apis";
 import { useRouter } from "next/router";
 import Cookie from "js-cookie";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 const Topnav = () => {
   const router = useRouter();
@@ -23,39 +28,50 @@ const Topnav = () => {
     router.push("/login");
   };
   return (
-    <Box
-      position="fixed"
-      top="0"
-      right="0"
-      h="3rem"
-      w="calc(100% - 16rem)"
-      backgroundColor="#fff"
-      boxShadow="0 2px 5px rgba(0,0,0,0.3)"
-      zIndex="5"
+    <Grid
+      templateColumns="14rem repeat(7, 1fr)"
+      backgroundColor="rgba(1, 170, 255, 0.8)"
+      h="full"
     >
-      <Flex
+      <GridItem colSpan="1" alignSelf="center" justifySelf="center">
+        <Image src="/images/png/logo.png" w="10rem" />
+      </GridItem>
+      <GridItem
+        colSpan="2"
+        colStart="7"
+        alignSelf="center"
+        justifySelf="end"
+        pr="2rem"
+      >
+        <Flex alignItems="center">
+          <Text mr="3" fontWeight="600">
+            Welcome, Saikat
+          </Text>
+          <Popover>
+            <PopoverTrigger>
+              <ChevronDownIcon cursor="pointer" />
+            </PopoverTrigger>
+            <PopoverContent w="10rem">
+              <PopoverArrow />
+              <PopoverHeader
+                color="black"
+                cursor="pointer"
+                onClick={handleLogout}
+              >
+                Logout
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
+        </Flex>
+      </GridItem>
+      {/* <Flex
         justifyContent="flex-end"
         alignItems="center"
         h="100%"
         paddingX="2rem"
       >
-        <Popover>
-          <PopoverTrigger>
-            <Avatar size="sm" cursor="pointer" />
-          </PopoverTrigger>
-          <PopoverContent marginRight="1rem" w="10rem">
-            <PopoverArrow />
-            {/* <PopoverCloseButton /> */}
-            <PopoverHeader cursor="pointer" onClick={handleLogout}>
-              Logout
-            </PopoverHeader>
-            {/* <PopoverBody>
-              Are you sure you want to have that milkshake?
-            </PopoverBody> */}
-          </PopoverContent>
-        </Popover>
-      </Flex>
-    </Box>
+      </Flex> */}
+    </Grid>
   );
 };
 

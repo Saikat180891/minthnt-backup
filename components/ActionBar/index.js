@@ -9,6 +9,8 @@ import {
   Tooltip,
   Wrap,
   WrapItem,
+  GridItem,
+  Grid,
 } from "@chakra-ui/react";
 import React from "react";
 import tw from "twin.macro";
@@ -16,7 +18,12 @@ import PaginationNavigator from "../PaginationNavigator";
 import DropdownMenu from "../DropdownMenu";
 import AutoComplete from "../Autocomplete";
 import { connect } from "react-redux";
-import { addFilters, removeFilter } from "../../store/actions/leads.actions";
+import {
+  addFilters,
+  removeFilter,
+  nextPage,
+  previousPage,
+} from "../../store/actions/leads.actions";
 import { getLabelFromValue } from "../Leads/initialValues.model";
 import Button from "@/Button";
 
@@ -29,11 +36,13 @@ const pageSizes = [
 const ActionBar = ({
   onNext = () => {},
   onPrevious = () => {},
-  onChange = () => {},
   filterOptions = [],
   addFilters = () => {},
   filters = {},
   removeFilter = () => {},
+  hideFilter = false,
+  nextPage = () => {},
+  previousPage = () => {},
 }) => {
   const [filter, setFilter] = React.useState();
 
@@ -42,36 +51,45 @@ const ActionBar = ({
   };
 
   return (
-    <Flex direction="column" mb="4" bg="white" shadow="md">
-      <HStack spacing={2} p={1} h="3rem">
-        <DropdownMenu options={filterOptions} onChange={setFilter}>
-          Filter
-        </DropdownMenu>
-        <AutoComplete onChange={handleFilterQuery} />
-        <DropdownMenu w="5rem" options={pageSizes}>
-          5
-        </DropdownMenu>
-        <PaginationNavigator onNext={onNext} onPrevious={onPrevious} />
-      </HStack>
-      <Divider />
-      {Object.entries(filters)?.length > 0 && (
-        <Wrap spacing={2} p="1">
-          {Object.entries(filters).map((filter, i) => (
-            <WrapItem key={i}>
-              <Tooltip
-                label={getLabelFromValue(filter[0], filterOptions)}
-                fontSize="md"
-              >
-                <Tag size="md" variant="solid" colorScheme="gray">
-                  <TagLabel>{filter[1]}</TagLabel>
-                  <TagCloseButton onClick={() => removeFilter(filter[0])} />
-                </Tag>
-              </Tooltip>
-            </WrapItem>
-          ))}
-        </Wrap>
-      )}
-    </Flex>
+    <Grid templateColumns="repeat(12, 1fr)" gap="3">
+      <GridItem colSpan="2">
+        {!hideFilter && (
+          <DropdownMenu w="full" options={filterOptions} onChange={setFilter}>
+            Filter
+          </DropdownMenu>
+        )}
+      </GridItem>
+      <GridItem colSpan="9">
+        {!hideFilter && <AutoComplete onChange={handleFilterQuery} />}
+      </GridItem>
+      <GridItem colSpan="1">
+        <HStack>
+          <PaginationNavigator onNext={nextPage} onPrevious={previousPage} />
+        </HStack>
+      </GridItem>
+      <GridItem colSpan="12">
+        {Object.entries(filters)?.length > 0 && (
+          <Wrap spacing={2} p="1">
+            {Object.entries(filters).map((filter, i) => (
+              <WrapItem key={i}>
+                <Tooltip
+                  label={getLabelFromValue(filter[0], filterOptions)}
+                  fontSize="md"
+                >
+                  <Tag size="md" variant="solid" bg="green.500" color="white">
+                    <TagLabel>{filter[1]}</TagLabel>
+                    <TagCloseButton
+                      color="white"
+                      onClick={() => removeFilter(filter[0])}
+                    />
+                  </Tag>
+                </Tooltip>
+              </WrapItem>
+            ))}
+          </Wrap>
+        )}
+      </GridItem>
+    </Grid>
   );
 };
 
@@ -81,6 +99,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { addFilters, removeFilter })(
-  ActionBar
-);
+export default connect(mapStateToProps, {
+  addFilters,
+  removeFilter,
+  nextPage,
+  previousPage,
+})(ActionBar);

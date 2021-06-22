@@ -5,6 +5,14 @@ module.exports = {
   presets: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    extend: {
+      gridTemplateColumns: {
+        loyaltyCol: "20px 1fr 20px",
+      },
+      gridTemplateRows: {
+        loyaltyRow: "3.1rem 20px 10rem 20px 100vh",
+      },
+    },
     screens: {
       sm: { min: "0px", max: "767px" },
       lg: { min: "767px", max: "1920px" },

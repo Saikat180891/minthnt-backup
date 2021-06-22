@@ -1,10 +1,8 @@
 import {
   Box,
-  Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
-  AccordionIcon,
   Flex,
   Grid,
   GridItem,
@@ -12,215 +10,378 @@ import {
   Button,
   Text,
   HStack,
-  Stack,
-  IconButton,
-  ButtonGroup,
+  Link,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { CloseIcon, AddIcon } from "@chakra-ui/icons";
 import React from "react";
-import tw from "twin.macro";
-import DisplayText from "../DisplayText";
 import * as types from "../../store/types/types";
-import ImagePreview from "../ImagePreview";
+import ImageUpload from "../ImagePreview";
+import { StatusIndicator } from "@/Icons";
+import Modal from "@/Modal";
+import { BarLoader } from "react-spinners";
+import { columns } from "./LeadsListHeader";
 
 const Lead = ({
   first_name = "",
   last_name = "",
   phone_number = "",
   email = "",
-  radio_image="",
+  radio_image = "",
   address = {},
   miscellaneous_questions = "",
   index = 0,
   referred_by = "",
   lead = {},
-  tabType = "",
+  status = "",
+  applied_referral_code = "",
+  activeTab = types.ON_HOLD,
+  loaders = {},
   onReject = () => {},
   onAccept = () => {},
   onImageUpload = () => {},
-  email_link = 'mailto:'+email
+  sort = "",
 }) => {
-  const [misc, setMisc] = React.useState(
+  const [misc] = React.useState(
     miscellaneous_questions ? JSON.parse(miscellaneous_questions) : null
   );
-  const [bg, setBg] = React.useState(
-    index % 2 === 0 ? "white" : "blackAlpha.100"
-  );
   const [radioimage, setRadioImage] = React.useState();
-
+  const [modalImage, setModalImage] = React.useState();
   const handleImageUpload = () => {
     onImageUpload(radioimage, lead);
   };
 
   return (
-    <AccordionItem borderRadius="none" bg="whitesmoke">
+    <AccordionItem
+      borderRadius="none"
+      border="none"
+      bg="whitesmoke"
+      w="full"
+      mb="4"
+    >
       <AccordionButton
         p="0"
         borderRadius="none"
         shadow="sm"
         outline="none"
-        backgroundColor={bg}
+        bg="minthnt.gray3"
         outline="none"
-        _hover={{ background: { bg }, outline: "none" }}
-        _active={{ outline: "none" }}
-        _focus={{ outline: "none" }}
+        border="none"
+        w="full"
+        h="3rem"
+        _hover={{ border: "none", outline: "none" }}
+        _active={{ outline: "none", border: "none" }}
+        _focus={{ outline: "none", border: "none" }}
       >
-        <Flex direction="column" width="100%">
-          <HStack p="2">
-            <DisplayText divideBy={6}>
-              {first_name}&nbsp;{last_name}
-            </DisplayText>
-            <DisplayText divideBy={6}>{address?.city}</DisplayText>
-            <DisplayText divideBy={6}>{address?.state}</DisplayText>
-            <DisplayText divideBy={6}>{address?.zip_code}</DisplayText>
-            <DisplayText divideBy={6}>{referred_by}</DisplayText>
-            <DisplayText divideBy={6}>
-              <ButtonGroup spacing={2}>
-                {tabType == types.GET_REQUESTED_LEADS && (
-                  <>
-                    <IconButton
-                      w={4}
-                      h={4}
-                      p={4}
-                      onClick={(e) => onAccept(e, lead)}
-                      variant="outline"
-                      colorScheme="green"
-                      aria-label="Accept request"
-                      icon={<CheckIcon />}
-                    />
-                    <IconButton
-                      w={4}
-                      h={4}
-                      p={4}
-                      onClick={(e) => onReject(e, lead)}
-                      variant="outline"
-                      colorScheme="red"
-                      aria-label="Reject request"
-                      icon={<CloseIcon />}
-                    />
-                  </>
-                )}
-              </ButtonGroup>
-            </DisplayText>
-          </HStack>
-          <Box flex="1" textAlign="left">
-            <Flex direction="column">
-              {/* <Flex
-              fontSize="12px"
-              fontWeight="600"
-              color="gray.400"
-              paddingTop="0.3rem"
-            >
-              <Box marginRight="1rem">Phn: {phone_no}</Box>
-              <Box marginRight="1rem">Email: {email}</Box>
-            </Flex> */}
-            </Flex>
-          </Box>
-        </Flex>
-      </AccordionButton>
-      <AccordionPanel pb={4} borderRadius="0">
-        <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-          <Flex
-            fontSize="12px"
-            direction="column"
-            padding="1rem"
-            background="white"
-          > 
-          <Box fontStyle="14px" fontWeight="600">
-          Contact
-        </Box>
-        <Flex direction="column" color="gray.500">
-          <Flex justifyContent="space-between">
-            <Box>Phone Nunber</Box>
-            {phone_number}
-          </Flex>
-          <Flex justifyContent="space-between"  color="blue">
-            <Box color="gray.500">Email</Box>
-            <a href={email_link}>{email}</a>
-          </Flex>
-          </Flex>
-            <Box fontStyle="14px"  mt="4" fontWeight="600">
-              Address
-            </Box>
-            <Flex direction="column" color="gray.500">
-              <Flex justifyContent="space-between">
-                <Box>Floor Number</Box>
-                {address?.floor_number}
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Box>Full Address</Box>
-                <Text textAlign="right">{address?.place_name}</Text>
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Box>Apartment/Unit Number</Box>
-                {address?.apartment_info}
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Box>City</Box>
-                {address?.city}
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Box>State</Box>
-                {address?.state}
-              </Flex>
-              <Flex justifyContent="space-between">
-                <Box>Zip Code</Box>
-                {address?.zip_code}
-              </Flex>
-            </Flex>
-           
-          </Flex>
-          <Box padding="1rem" background="white" rounded="lg" overflow="hidden">
-            <Image src={address?.address_image} />
-          </Box>
-          <Flex
-            justifyItems="flex-start"
-            alignItems="flex-start"
-            background="white"
-            rounded="lg"
-            overflow="hidden"
-            justifyContent="flex-end"
-            direction="column"
-            h="15rem"
-            p="1"
-          >{radio_image ?<img src={radio_image}/>:<>
-            <Text>Upload a radio image</Text>
-            <ImagePreview
-              my="1"
-              onChange={(e) => setRadioImage(e.target.files[0])}
-            />
-            <Button onClick={handleImageUpload}>Upload</Button></>}
-          </Flex>
+        <Grid
+          templateColumns="repeat(6, 1fr)"
+          w="full"
+          h="full"
+          alignContent="center"
+          justifyItems="start"
+          fontSize="14"
+          gap={6}
+        >
+          <GridItem
+            pl="4"
+            color={sort === columns[0].toUpperCase() ? "minthnt.green1" : ""}
+          >
+            {first_name}&nbsp;{last_name}
+          </GridItem>
+          <GridItem
+            color={sort === columns[1].toUpperCase() ? "minthnt.green1" : ""}
+          >
+            {address?.city}
+          </GridItem>
+          <GridItem
+            color={sort === columns[2].toUpperCase() ? "minthnt.green1" : ""}
+          >
+            {address?.state}
+          </GridItem>
+          <GridItem
+            color={sort === columns[3].toUpperCase() ? "minthnt.green1" : ""}
+          >
+            {address?.zip_code}
+          </GridItem>
+          <GridItem
+            color={sort === columns[4].toUpperCase() ? "minthnt.green1" : ""}
+          >
+            {address?.referred_by}
+          </GridItem>
+          <GridItem
+            fontWeight="600"
+            color={sort === columns[5].toUpperCase() ? "minthnt.green1" : ""}
+          >
+            {status.replace("_", " ")}
+          </GridItem>
         </Grid>
-        {misc && (
-          <Flex direction="column" mt="4">
-            {misc?.map((q, i) => (
-              <Flex
-                bg="white"
-                p="4"
-                justifyContent="flex-start"
-                alignItems="flex-start"
-                direction="column"
-                key={i}
-                fontSize="sm"
-                rounded="lg"
+      </AccordionButton>
+      <AccordionPanel borderRadius="0" bg="black" px="0" py="6" fontSize="12">
+        <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+          <GridItem colSpan="3">
+            <Flex w="full" direction="column">
+              <Box w="full" fontWeight="bold" pb="2">
+                MAILING ADDRESS
+              </Box>
+              <Text color="minthnt.blue2" fontWeight="semibold">
+                Name
+              </Text>
+              <Text pb="2">
+                {first_name}&nbsp;{last_name}
+              </Text>
+              <Text color="minthnt.blue2" fontWeight="semibold">
+                Contact
+              </Text>
+              <Text>{phone_number}</Text>
+              <Text pb="2" textDecor="underline" cursor="pointer">
+                <Link href={`mailto:${email}`}>{email}</Link>
+              </Text>
+              <Text color="minthnt.blue2" fontWeight="semibold">
+                Floor
+              </Text>
+              <Text pb="2">{address?.floor_number}</Text>
+              <Text color="minthnt.blue2" fontWeight="semibold">
+                Apartment info
+              </Text>
+              <Text pb="2">{address?.apartment_info}</Text>
+              <Text color="minthnt.blue2" fontWeight="semibold">
+                Full Adddress
+              </Text>
+              <Text pb="2">{address?.place_name}</Text>
+              <Text
+                textDecor="underline"
+                color="minthnt.green1"
+                cursor="pointer"
+                fontWeight="bold"
               >
-                <Box>{q.ques}</Box>
-                <Box
-                  rounded="md"
-                  px="3"
-                  py="1"
-                  mt="1"
-                  fontWeight="600"
-                  bg={q.ans === true ? "green.300" : "red.300"}
-                  color="white"
+                <Link
+                  href={`/address-map?lat=${address?.latitude}&lng=${address?.longitude}`}
+                  target="_blank"
                 >
-                  {q.ans === true ? "Yes" : "No"}
+                  View on map
+                </Link>
+              </Text>
+            </Flex>
+          </GridItem>
+          <GridItem colSpan="3">
+            <Flex w="full" direction="column">
+              <Box w="full" fontWeight="bold" pb="2">
+                ADMIN NOTES
+              </Box>
+              {misc?.map((q, i) => (
+                <Box key={i}>
+                  <Text mb="1">{q.ques}</Text>
+                  <Box>
+                    {q.ans === true ? (
+                      <HStack spacing={2}>
+                        <StatusIndicator status={true} /> <Text>Yes</Text>
+                      </HStack>
+                    ) : (
+                      <HStack spacing={2}>
+                        <StatusIndicator status={false} /> <Text>No</Text>
+                      </HStack>
+                    )}
+                  </Box>
                 </Box>
-              </Flex>
-            ))}
-          </Flex>
-        )}
+              ))}
+            </Flex>
+          </GridItem>
+          <GridItem colSpan="2">
+            <Flex w="full" direction="column">
+              <Box w="full" fontWeight="bold" pb="2">
+                REFERRALS
+              </Box>
+              {referred_by && (
+                <>
+                  <Text color="minthnt.blue2" fontWeight="semibold">
+                    Referred By
+                  </Text>
+                  <Text pb="2">{referred_by}</Text>
+                </>
+              )}
+              {applied_referral_code && (
+                <>
+                  <Text color="minthnt.blue2" fontWeight="semibold">
+                    Referral Code
+                  </Text>
+                  <Text pb="2">{applied_referral_code}</Text>
+                </>
+              )}
+            </Flex>
+          </GridItem>
+          <GridItem colSpan="2">
+            <Flex w="full" direction="column">
+              <Box w="full" fontWeight="bold" pb="2">
+                HOST VIEW
+              </Box>
+              {address?.address_image ? (
+                <Image
+                  w="full"
+                  h="8rem"
+                  objectFit="cover"
+                  cursor="pointer"
+                  src={address?.address_image}
+                  onClick={() => setModalImage(address?.address_image)}
+                />
+              ) : (
+                <Flex
+                  w="full"
+                  h="8rem"
+                  bg="minthnt.gray3"
+                  justifyContent="center"
+                  alignItems="center"
+                  fontStyle="italic"
+                >
+                  No image uploaded
+                </Flex>
+              )}
+            </Flex>
+          </GridItem>
+          <GridItem colSpan="2">
+            <Flex w="full" direction="column">
+              <Box w="full" fontWeight="bold" pb="2">
+                RF ANALYSIS
+              </Box>
+              {radio_image ? (
+                <Image
+                  h="8rem"
+                  objectFit="cover"
+                  src={radio_image}
+                  cursor="pointer"
+                  onClick={() => setModalImage(radio_image)}
+                />
+              ) : (
+                <>
+                  <ImageUpload
+                    h="8rem"
+                    disabled={loaders?.["RF_IMAGE_LOADER"] === true}
+                    onChange={(e) => setRadioImage(e.target.files[0])}
+                  />
+                  <Flex
+                    w="full"
+                    my="2"
+                    visibility={
+                      loaders?.["RF_IMAGE_LOADER"] === true
+                        ? "visible"
+                        : "hidden"
+                    }
+                  >
+                    <BarLoader color="#fff" width="100%" />
+                  </Flex>
+                  <Button
+                    w="min-content"
+                    bg="blue.500"
+                    outline="none"
+                    border="none"
+                    disabled={loaders?.["RF_IMAGE_LOADER"] === true}
+                    borderRadius="0 1rem 0 1rem"
+                    _hover={{
+                      bg: "blue.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _active={{
+                      bg: "blue.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _focus={{
+                      bg: "blue.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    onClick={handleImageUpload}
+                  >
+                    Upload
+                  </Button>
+                </>
+              )}
+            </Flex>
+          </GridItem>
+          <GridItem colSpan="12">
+            <HStack spacing={4}>
+              {activeTab === types.ON_HOLD && (
+                <>
+                  <Button
+                    onClick={(e) => onAccept(e, lead)}
+                    bg="green.500"
+                    outline="none"
+                    border="none"
+                    borderRadius="0 1rem 0 1rem"
+                    _hover={{
+                      bg: "green.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _active={{
+                      bg: "green.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                    _focus={{
+                      bg: "green.500",
+                      outline: "none",
+                      border: "none",
+                    }}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    onClick={(e) => onReject(e, lead)}
+                    bg="red.500"
+                    outline="none"
+                    border="none"
+                    borderRadius="0 1rem 0 1rem"
+                    _hover={{ bg: "red.500", outline: "none", border: "none" }}
+                    _active={{ bg: "red.500", outline: "none", border: "none" }}
+                    _focus={{ bg: "red.500", outline: "none", border: "none" }}
+                  >
+                    Reject
+                  </Button>
+                </>
+              )}
+              {activeTab !== types.ON_HOLD && (
+                <Button
+                  onClick={(e) => onReject(e, lead)}
+                  bg="orange.500"
+                  outline="none"
+                  border="none"
+                  borderRadius="0 1rem 0 1rem"
+                  _hover={{ bg: "orange.500", outline: "none", border: "none" }}
+                  _active={{
+                    bg: "orange.500",
+                    outline: "none",
+                    border: "none",
+                  }}
+                  _focus={{ bg: "orange.500", outline: "none", border: "none" }}
+                >
+                  Move to On Hold
+                </Button>
+              )}
+            </HStack>
+          </GridItem>
+        </Grid>
+        <Modal show={modalImage}>
+          <Box w="50vw" h="30rem" position="relative" bg="black">
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              color="white"
+              w="6"
+              h="6"
+              rounded="full"
+              bg="minthnt.gray2"
+              position="absolute"
+              top="0"
+              right="0"
+              transform="translate3d(0.7rem, -0.7rem, 0)"
+              cursor="pointer"
+              onClick={() => setModalImage("")}
+            >
+              <CloseIcon w={3} h={3} />
+            </Flex>
+            <Image w="full" h="full" objectFit="cover" src={modalImage} />
+          </Box>
+        </Modal>
       </AccordionPanel>
     </AccordionItem>
   );

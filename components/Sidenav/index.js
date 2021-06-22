@@ -24,36 +24,28 @@ const routes = [
 const SideBar = () => {
   const router = useRouter();
   return (
-    <Box
-      w="16rem"
-      position="fixed"
-      top="0"
-      left="0"
-      h="100vh"
-      backgroundColor="#5b7cfd"
-    >
-      <Flex direction="column" paddingTop="0.6rem">
-        <Box
-          marginBottom="5rem"
-          paddingLeft="2rem"
-          textAlign="left"
-          color="white"
-        >
-          MintHNT
-        </Box>
+    <Box w="full" h="full" bg="minthnt.blue5">
+      <Flex direction="column" paddingTop="3rem" pl="2rem">
         {routes.map((route, i) => (
           <Link key={i} href={route.path}>
             <Box
               as="a"
-              backgroundColor={router.pathname === route.path && "#5374f0"}
+              style={
+                router.pathname === route.path
+                  ? {
+                      backgroundColor: "rgba(1, 170, 255, 0.5)",
+                      transform: "translateX(1rem)",
+                      borderRadius: "0 1rem 0 1rem",
+                      fontWeight: 700,
+                    }
+                  : {}
+              }
               color="#fff"
               paddingLeft="2rem"
               paddingY="0.8rem"
               fontSize="12px"
-              fontWeight="600"
               cursor="pointer"
             >
-              <Icon as={route.icon} marginRight="0.5rem" />
               {route.label}
             </Box>
           </Link>

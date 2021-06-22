@@ -10,6 +10,7 @@ const DisplayText = ({ children, divideBy = 1, align = "left", ...rest }) => {
       whiteSpace="nowrap"
       textOverflow="ellipsis"
       overflow="hidden"
+      color="white"
     >
       {children}
     </Badge>

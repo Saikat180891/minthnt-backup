@@ -8,6 +8,13 @@ const AutoComplete = ({ onChange = () => {} }) => {
     onChange(value);
     setValue("");
   };
+
+  const handleKeyUp = (e) => {
+    if (e.keyCode === 13) {
+      handleChange();
+    }
+  };
+
   return (
     <InputGroup size="md">
       <Input
@@ -16,7 +23,10 @@ const AutoComplete = ({ onChange = () => {} }) => {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onKeyUp={handleKeyUp}
         placeholder="Search something here"
+        bg="minthnt.gray3"
+        border="none"
       />
       <InputRightElement width="5rem">
         <Button h="1.75rem" size="sm" colorScheme="blue" onClick={handleChange}>

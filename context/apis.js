@@ -1,5 +1,27 @@
 import Cookie from "js-cookie";
 import { makeQuery } from "../utils";
+import { toast } from "@/Toast";
+
+export const asyncFetcher = async (
+  api,
+  showSuccess = false,
+  showError = false
+) => {
+  const data = await api;
+  if (data?.status === "SUCCESS" && showSuccess) {
+    toast.next({
+      title: data?.status,
+      description: data?.display_msg,
+    });
+  } else if (data?.status === "FAILURE" && showError) {
+    toast.next({
+      title: data?.status,
+      description: data?.display_msg,
+      status: "error",
+    });
+  }
+  return data?.data;
+};
 
 const Apis = (() => {
   const baseUrl = process.env.NEXT_PUBLIC_API_DOMAIN;
@@ -39,12 +61,17 @@ const Apis = (() => {
     currentPage = 1,
     tabType = "ON_HOLD",
     PAGE_SIZE = 5,
-    filters = {}
+    filters = {},
+    sort = ""
   ) => {
     let url = `${baseUrl}/api/v1/leads?page=${currentPage}&page_size=${PAGE_SIZE}&status=${tabType}`;
 
     if (Object.keys(filters).length > 0) {
       url = url + `&${makeQuery(filters)}`;
+    }
+
+    if (sort) {
+      url = url + `&sort_by=${sort.toLowerCase().replace(" ", "_")}`;
     }
 
     const res = await fetch(url, {
