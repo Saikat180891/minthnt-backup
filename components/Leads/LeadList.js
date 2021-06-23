@@ -238,6 +238,16 @@ const LeadList = ({
                 sort={sort}
               />
             ))}
+            {leads.length === 0 && (
+              <Flex
+                w="full"
+                justifyContent="center"
+                alignItems="center"
+                h="50vh"
+              >
+                No leads found
+              </Flex>
+            )}
           </Accordion>
         </>
       )}
