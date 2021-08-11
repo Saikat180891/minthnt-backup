@@ -11,7 +11,7 @@ export const userReducer = (state = initialUserState, { type, payload }) => {
       return {
         ...state,
         token: payload?.token,
-        isLoggedIn: payload?.isLoggedIn,
+        isLoggedIn: true,
       };
     case types.SET_USER_INFO:
       return {

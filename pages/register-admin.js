@@ -25,26 +25,24 @@ const RegisterAdmin = () => {
     try {
       const data = await Apis.registerAdmin(payload);
       console.log(data?.errors);
-      if (data?.status=="SUCCESS") {
-      toast({
-        title: "Account created.",
-        description: "We've created your account for you.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-    else {      
-      toast({
-      title: "Account creation failed",
-      description: data?.errors?.[0]?.display_msg,
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });}
-    } catch (err) {
-
-    }
+      if (data?.status == "SUCCESS") {
+        toast({
+          title: "Account created.",
+          description: "We've created your account for you.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Account creation failed",
+          description: data?.errors?.[0]?.display_msg,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (err) {}
   };
   return (
     <Dashboard>
@@ -170,17 +168,17 @@ const RegisterAdmin = () => {
 export default RegisterAdmin;
 
 export async function getServerSideProps({ req, res }) {
-  let isLoggedIn = false;
-  const isCookieAvailable = req.cookies.token;
-  if (isCookieAvailable) {
-    isLoggedIn = true;
-    return {
-      props: { isLoggedIn },
-    };
-  }
+  // let isLoggedIn = false;
+  // const isCookieAvailable = req.cookies.token;
+  // if (isCookieAvailable) {
+  //   isLoggedIn = true;
+  //   return {
+  //     props: { isLoggedIn },
+  //   };
+  // }
 
-  res.statusCode = 302;
-  res.setHeader("Location", `/login`);
+  // res.statusCode = 302;
+  // res.setHeader("Location", `/login`);
 
   return {
     props: {},

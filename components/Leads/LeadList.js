@@ -1,86 +1,3 @@
-// import React from "react";
-// import { connect } from "react-redux";
-// import { setRequestedLeads } from "../../store/actions/leads.actions";
-// import LeadsView from "./LeadsView";
-// import { usePagination } from "../PaginationNavigator/usePagination";
-// import { Box, TabPanel } from "@chakra-ui//react";
-// import { useToast } from "@chakra-ui/react";
-
-// const PAGE_SIZE = 5;
-// const RequestedLeads = ({
-//   leads = [],
-//   tabType = "",
-//   setRequestedLeads,
-//   filters = {},
-// }) => {
-//   const ref = React.useRef();
-//   const { changePage, setIsLastPage, currentPage, isLastPage } =
-//     usePagination();
-//   const [isLoading, setLoading] = React.useState(false);
-
-//   React.useEffect(() => {
-//     if (!ref?.current) return;
-//     const observer = new IntersectionObserver(
-//       ([entry]) => {
-//         // console.log(filters);
-//         if (entry.isIntersecting) {
-//           setLoading(true);
-//           // Apis.getLeadsList(currentPage, tabType, PAGE_SIZE, filters).then(
-//           //   (data) => {
-//           //     if (data?.data?.results) {
-//           //       console.log(data?.data?.results);
-//           //       setRequestedLeads({
-//           //         leads: data?.data?.results || [],
-//           //         currentPage,
-//           //         isLastPage,
-//           //       });
-//           //       if (currentPage * PAGE_SIZE > data?.count) {
-//           //         setIsLastPage(true);
-//           //       }
-//           //     }
-//           //     setLoading(false);
-//           //   }
-//           // );
-//         }
-//       },
-//       { threshold: 0 }
-//     );
-//     observer.observe(ref.current);
-//     return () => {
-//       if (ref?.current) observer.unobserve(ref.current);
-//     };
-//   }, [currentPage, filters]);
-
-//   const handleQueryFiltration = (e) => {
-//     console.log(e);
-//   };
-
-//   const toast = useToast();
-
-//   return (
-//     <Box ref={ref}>
-//       <LeadsView
-//         tabType={tabType}
-//         isLoading={isLoading}
-//         onNext={() => changePage(1)}
-//         onAccept={handleAcceptance}
-//         onPrevious={() => changePage(-1)}
-//         onReject={handleRejection}
-//         onChange={handleQueryFiltration}
-//         onImageUpload={handleImageUpload}
-//       />
-//     </Box>
-//   );
-// };
-
-// const mapStateToProps = (state) => {
-//   return {
-//     filters: state.leads.others.filters,
-//   };
-// };
-
-// export default connect(mapStateToProps, { setRequestedLeads })(RequestedLeads);
-
 import { Box, Accordion, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import Lead from "./Lead";
@@ -88,11 +5,7 @@ import LeadsListHeader from "./LeadsListHeader";
 import ActionBar from "../ActionBar";
 import { filterOptions } from "./initialValues.model";
 import { connect } from "react-redux";
-import {
-  ACCEPTED_LEADS,
-  REJECTED_LEADS,
-  ON_HOLD,
-} from "../../store/types/types";
+import { ON_HOLD } from "../../store/types/types";
 import * as Loaders from "../../store/types/loaderTypes";
 import { BeatLoader } from "react-spinners";
 import Apis, { asyncFetcher } from "../../context/apis";

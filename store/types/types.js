@@ -18,3 +18,8 @@ export const REMOVE_LEAD = "REMOVE_LEAD";
 export const START_LOADER = "START_LOADER";
 export const STOP_LOADER = "STOP_LOADER";
 export const TOGGLE_LOADER = "TOGGLE_LOADER";
+
+export const SET_FAQ = "SET_FAQ";
+export const DELETE_FAQ = "DELETE_FAQ";
+export const UPDATE_FAQ = "UPDATE_FAQ";
+export const ADD_FAQ = "ADD_FAQ";

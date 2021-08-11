@@ -79,17 +79,21 @@ const LeadsView = ({
   const changeTab = async (tabType = ON_HOLD) => {
     setActiveTab(tabType);
     startLoader(Loaders.GET_LEAD_LIST);
-    const leads = await asyncFetcher(
-      Apis.getLeadsList(
-        currentPage,
-        tabType,
-        itemsPerPage,
-        filters,
-        sortSteps[sortType] + sort
-      )
-    );
-    stopLoader(Loaders.GET_LEAD_LIST);
-    setLeads({ leads: leads?.results, count: leads?.count });
+    try {
+      const leads = await asyncFetcher(
+        Apis.getLeadsList(
+          currentPage,
+          tabType,
+          itemsPerPage,
+          filters,
+          sortSteps[sortType] + sort
+        )
+      );
+      stopLoader(Loaders.GET_LEAD_LIST);
+      setLeads({ leads: leads?.results, count: leads?.count });
+    } catch (err) {
+      stopLoader(Loaders.GET_LEAD_LIST);
+    }
   };
 
   React.useEffect(() => {

@@ -19,6 +19,11 @@ const routes = [
     label: "Register Admin",
     icon: AddIcon,
   },
+  {
+    path: "/faq-editor",
+    label: "FAQ editor",
+    icon: AddIcon,
+  },
 ];
 
 const SideBar = () => {
